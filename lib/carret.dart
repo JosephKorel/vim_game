@@ -52,7 +52,7 @@ class PositionedCarret extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final offset = ref.watch(carretOffsetProvider);
+    final offset = ref.watch(carretProvider);
     return Stack(
       children: [
         Positioned(

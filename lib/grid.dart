@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vim_game/carret.dart';
+import 'package:vim_game/keyboard_listener.dart';
 import 'package:vim_game/line_counter.dart';
 import 'package:vim_game/providers/providers.dart';
 
@@ -21,24 +22,31 @@ class EditorGrid extends StatelessWidget {
           builder: (context, constraints) {
             final screenWidth = constraints.maxWidth;
             final screenHeight = constraints.maxHeight;
-            final squareSize = screenWidth / 80;
+            final squareWidth = screenWidth / 80;
+            final squareHeight = squareWidth * 1.25;
+            final squareSize = Size(squareWidth, squareHeight);
 
             return Row(
               children: [
                 LineCounter(squareSize: squareSize, maxHeight: screenHeight),
                 Expanded(
-                  child: Stack(
-                    children: [
-                      CustomPaint(
-                        size: Size(double.infinity, screenHeight),
-                        painter: GridPainter(
-                            squareSize: Size(squareSize, squareSize * 1.25)),
-                      ),
-                      PositionedCarret(
-                        squareSize: Size(squareSize, squareSize * 1.25),
-                      ),
-                      GridOverlay(squareSize: squareSize),
-                    ],
+                  child: KeyboardListenerView(
+                    screenSize: Size(screenWidth, screenHeight),
+                    squareSize: squareSize,
+                    child: Stack(
+                      children: [
+                        CustomPaint(
+                          size: Size(double.infinity, screenHeight),
+                          painter: GridPainter(
+                            squareSize: squareSize,
+                          ),
+                        ),
+                        PositionedCarret(
+                          squareSize: squareSize,
+                        ),
+                        GridOverlay(squareSize: squareWidth),
+                      ],
+                    ),
                   ),
                 ),
               ],
