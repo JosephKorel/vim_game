@@ -1,4 +1,3 @@
-// Paint the grid lines for the editor
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vim_game/carret.dart';
@@ -11,36 +10,41 @@ class EditorGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Code Editor Layout')),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final screenWidth = constraints.maxWidth;
-          final screenHeight = constraints.maxHeight;
-          final squareSize = screenWidth / 80;
+      appBar: AppBar(
+        title: const Text('Code Editor Layout'),
+        backgroundColor: Colors.indigo,
+        foregroundColor: Colors.white,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final screenWidth = constraints.maxWidth;
+            final screenHeight = constraints.maxHeight;
+            final squareSize = screenWidth / 80;
 
-          return Stack(
-            children: [
-              // Custom painter to draw the grid lines
-              Row(
-                children: [
-                  LineCounter(squareSize: squareSize, maxHeight: screenHeight),
-                  Expanded(
-                    child: CustomPaint(
-                      size: Size(double.infinity, screenHeight),
-                      painter: GridPainter(
-                          squareSize: Size(squareSize, squareSize * 1.25)),
-                    ),
+            return Row(
+              children: [
+                LineCounter(squareSize: squareSize, maxHeight: screenHeight),
+                Expanded(
+                  child: Stack(
+                    children: [
+                      CustomPaint(
+                        size: Size(double.infinity, screenHeight),
+                        painter: GridPainter(
+                            squareSize: Size(squareSize, squareSize * 1.25)),
+                      ),
+                      PositionedCarret(
+                        squareSize: Size(squareSize, squareSize * 1.25),
+                      ),
+                      GridOverlay(squareSize: squareSize),
+                    ],
                   ),
-                ],
-              ),
-              // Overlay for interactivity
-              PositionedCarret(
-                squareSize: Size(squareSize, squareSize * 1.25),
-              ),
-              GridOverlay(squareSize: squareSize),
-            ],
-          );
-        },
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -59,8 +63,6 @@ class GridPainter extends CustomPainter {
     final paint = Paint()
       ..color = Colors.grey
       ..strokeWidth = 0.5;
-
-    debugPrint('Size: $_squareWidth, $_squareHeight');
 
     // Draw vertical lines
     for (double x = 0; x < size.width; x += _squareWidth) {

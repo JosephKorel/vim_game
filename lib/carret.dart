@@ -39,7 +39,7 @@ class _CarretState extends State<Carret> {
       child: Container(
         width: widget.squareSize.width,
         height: widget.squareSize.height,
-        color: Colors.green,
+        color: Colors.indigo,
       ),
     );
   }
