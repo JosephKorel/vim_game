@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 
-sealed class CarretEvent {
-  const CarretEvent();
+base class CarretEvent {
+  CarretEvent({this.jumpSteps = 1});
 
-  Offset moveTo(Offset currentCarretPosition);
+  int jumpSteps;
+
+  bool get horizontal => true;
+  bool get goingUp => false;
+
+  void updateJumpSteps(int jumpSteps) => this.jumpSteps = jumpSteps;
+
+  Offset moveTo(Offset currentCarretPosition) => throw UnimplementedError();
 }
 
 final class GoRightCarrentEvent extends CarretEvent {
-  const GoRightCarrentEvent();
+  GoRightCarrentEvent({super.jumpSteps});
 
-  double _moveOneBlockRight(double dx) => dx + 1;
+  double _moveOneBlockRight(double dx) => dx + jumpSteps;
 
   @override
   Offset moveTo(Offset currentCarretPosition) {
@@ -21,15 +28,52 @@ final class GoRightCarrentEvent extends CarretEvent {
 }
 
 final class GoLeftCarrentEvent extends CarretEvent {
-  const GoLeftCarrentEvent();
+  GoLeftCarrentEvent({super.jumpSteps});
 
-  double _moveOneBlockLeft(double dx) => dx - 1;
+  double _moveOneBlockLeft(double dx) => dx - jumpSteps;
 
   @override
   Offset moveTo(Offset currentCarretPosition) {
     return Offset(
       _moveOneBlockLeft(currentCarretPosition.dx),
       currentCarretPosition.dy,
+    );
+  }
+}
+
+final class GoUpCarrentEvent extends CarretEvent {
+  GoUpCarrentEvent({super.jumpSteps});
+
+  double _moveOneBlockUp(double dy) => dy - jumpSteps;
+
+  @override
+  bool get horizontal => false;
+
+  @override
+  bool get goingUp => true;
+
+  @override
+  Offset moveTo(Offset currentCarretPosition) {
+    return Offset(
+      currentCarretPosition.dx,
+      _moveOneBlockUp(currentCarretPosition.dy),
+    );
+  }
+}
+
+final class GoDownCarrentEvent extends CarretEvent {
+  GoDownCarrentEvent({super.jumpSteps});
+
+  double _moveOneBlockDown(double dy) => dy + jumpSteps;
+
+  @override
+  bool get horizontal => false;
+
+  @override
+  Offset moveTo(Offset currentCarretPosition) {
+    return Offset(
+      currentCarretPosition.dx,
+      _moveOneBlockDown(currentCarretPosition.dy),
     );
   }
 }

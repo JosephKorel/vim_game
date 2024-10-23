@@ -35,27 +35,22 @@ class _KeyboardListenerViewState extends ConsumerState<KeyboardListenerView> {
     _keyboardEventStreamController =
         _keyboardEventHandler.carretEventStream.stream.listen((event) {
       final carretPosition = ref.read(carretProvider);
-      switch (event) {
-        case const GoRightCarrentEvent():
-          final canGoRight = _carretValidator.canGoRight(carretPosition.dx);
-          if (canGoRight) {
-            ref.read(carretProvider.notifier).updateCarretPosition(
-                  event.moveTo(carretPosition.offset),
-                );
-          }
-          break;
-        case const GoLeftCarrentEvent():
-          final canGoLeft = _carretValidator.canGoLeft(carretPosition.dx);
-          if (canGoLeft) {
-            ref.read(carretProvider.notifier).updateCarretPosition(
-                  event.moveTo(carretPosition.offset),
-                );
-          }
-          break;
-        default:
-          return;
+      final shouldMoveCarret = _carretValidator.shouldMove(
+        event: event,
+        carretPosition: carretPosition,
+      );
+      if (!shouldMoveCarret) {
+        return;
       }
+      _moveCarret(event);
     });
+  }
+
+  void _moveCarret(CarretEvent event) {
+    final carretPosition = ref.read(carretProvider);
+    ref.read(carretProvider.notifier).updateCarretPosition(
+          event.moveTo(carretPosition.offset),
+        );
   }
 
   @override
