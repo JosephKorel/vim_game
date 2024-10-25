@@ -10,11 +10,8 @@ final class CarretValidator {
   int get _maxYOffset =>
       ((screenSize.height - squareSize.height) / squareSize.height).floor();
 
-  double _carretOccupiedWidth(double carretXOffset) =>
-      carretXOffset * squareSize.width;
-
-  double _carretOccupiedHeight(double carretYOffset) =>
-      carretYOffset * squareSize.height;
+  int get _maxXOffset =>
+      ((screenSize.width - squareSize.width) / squareSize.width).floor();
 
   bool _canGoRight(double carretDx) =>
       carretDx * squareSize.width < screenSize.width;
@@ -29,13 +26,30 @@ final class CarretValidator {
     required CarretEvent event,
     required CarretPosition carretPosition,
   }) {
-    final carretOccupiedWidth =
-        _carretOccupiedWidth(carretPosition.dx * event.jumpSteps);
-    final needToUpdateJumpSteps = carretOccupiedWidth > screenSize.width;
-    if (needToUpdateJumpSteps) {
-      final jumpStep =
-          ((carretOccupiedWidth - screenSize.width) * squareSize.width).floor();
-      event.updateJumpSteps(jumpStep);
+    print('------------------------------------');
+    print('The carret dx is: ${carretPosition.dx + event.jumpSteps}');
+    if (event.goingLeft) {
+      _updateHorizontalCarretPositionWhenGoingLeft(
+        event: event,
+        carretPosition: carretPosition,
+      );
+      return;
+    }
+    final carretDx = carretPosition.dx + event.jumpSteps;
+    final overflowed = carretDx > _maxXOffset;
+    print('The maxium offset is: $_maxXOffset');
+    print('------------------------------------');
+    if (overflowed) {
+      _goToMaximumHorizontalOffset(event: event, carretDx: carretDx);
+    }
+  }
+
+  void _updateHorizontalCarretPositionWhenGoingLeft({
+    required CarretEvent event,
+    required CarretPosition carretPosition,
+  }) {
+    if (carretPosition.dx < event.jumpSteps) {
+      event.updateJumpSteps(carretPosition.dx.toInt());
     }
   }
 
@@ -48,7 +62,17 @@ final class CarretValidator {
     }
   }
 
-  void _updateJumpStepsToMaximumValue({
+  void _goToMaximumHorizontalOffset({
+    required CarretEvent event,
+    required double carretDx,
+  }) {
+    final remainingOffset = (carretDx - _maxXOffset).abs();
+    print('The maxium offset is: $_maxXOffset');
+    print('remainingOffset: $remainingOffset');
+    event.updateJumpSteps(remainingOffset.toInt());
+  }
+
+  void _goToMaximumVerticalOffset({
     required CarretEvent event,
     required double carretDy,
   }) {
@@ -60,6 +84,11 @@ final class CarretValidator {
     required CarretEvent event,
     required CarretPosition carretPosition,
   }) {
+    print('------------------------------------');
+    print('The current dy is: ${carretPosition.dy}');
+    print(
+        'The carret dy with jumpSteps is: ${carretPosition.dy + event.jumpSteps}');
+    print('The maximum Y offset is: $_maxYOffset');
     if (event.goingUp) {
       _updateVerticalCarretPositionWhenGoingUp(
         event: event,
@@ -71,8 +100,11 @@ final class CarretValidator {
     final carretDy = carretPosition.dy + event.jumpSteps;
     final overflowed = carretDy > _maxYOffset;
     if (overflowed) {
-      _updateJumpStepsToMaximumValue(event: event, carretDy: carretDy);
+      print(
+          'Its overflowing and the difference is: ${(carretDy - _maxYOffset).abs()}');
+      _goToMaximumVerticalOffset(event: event, carretDy: carretPosition.dy);
     }
+    print('------------------------------------');
   }
 
   void _updateCarretJumpSteps({
@@ -94,6 +126,7 @@ final class CarretValidator {
   }) {
     if (event.jumpSteps > 1) {
       _updateCarretJumpSteps(event: event, carretPosition: carretPosition);
+      return true;
     }
     return (switch (event) {
       GoRightCarrentEvent() => _canGoRight(carretPosition.dx),
@@ -103,29 +136,4 @@ final class CarretValidator {
       _ => false,
     });
   }
-}
-
-final class CarretEventValidator {
-  final Size screenSize;
-  final Size squareSize;
-  final CarretEvent event;
-  final CarretPosition carretPosition;
-
-  const CarretEventValidator({
-    required this.screenSize,
-    required this.squareSize,
-    required this.event,
-    required this.carretPosition,
-  });
-
-  double get _carretOccupiedWidth => carretPosition.dx * squareSize.width;
-  double get _carretOccupiedHeight => carretPosition.dy * squareSize.height;
-
-  double get _carretXDistance => _carretOccupiedWidth * event.jumpSteps;
-  double get _carretYDistance => _carretOccupiedHeight * event.jumpSteps;
-
-  bool get _carretXDistanceOverflowsScreen =>
-      _carretXDistance > screenSize.width;
-  bool get _carretYDistanceOverflowsScreen =>
-      _carretYDistance > screenSize.height;
 }

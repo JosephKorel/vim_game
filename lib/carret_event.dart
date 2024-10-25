@@ -7,6 +7,7 @@ base class CarretEvent {
 
   bool get horizontal => true;
   bool get goingUp => false;
+  bool get goingLeft => false;
 
   void updateJumpSteps(int jumpSteps) => this.jumpSteps = jumpSteps;
 
@@ -31,6 +32,9 @@ final class GoLeftCarrentEvent extends CarretEvent {
   GoLeftCarrentEvent({super.jumpSteps});
 
   double _moveOneBlockLeft(double dx) => dx - jumpSteps;
+
+  @override
+  bool get goingLeft => true;
 
   @override
   Offset moveTo(Offset currentCarretPosition) {
