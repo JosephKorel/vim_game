@@ -30,24 +30,27 @@ class EditorGrid extends StatelessWidget {
               children: [
                 LineCounter(squareSize: squareSize, maxHeight: screenHeight),
                 Expanded(
-                  child: KeyboardListenerView(
-                    screenSize: Size(screenWidth, screenHeight),
-                    squareSize: squareSize,
-                    child: Stack(
-                      children: [
-                        CustomPaint(
-                          size: Size(double.infinity, screenHeight),
-                          painter: GridPainter(
+                  child: LayoutBuilder(builder: (context, constraints) {
+                    return KeyboardListenerView(
+                      screenSize:
+                          Size(constraints.maxWidth, constraints.maxHeight),
+                      squareSize: squareSize,
+                      child: Stack(
+                        children: [
+                          CustomPaint(
+                            size: Size(double.infinity, constraints.maxHeight),
+                            painter: GridPainter(
+                              squareSize: squareSize,
+                            ),
+                          ),
+                          PositionedCarret(
                             squareSize: squareSize,
                           ),
-                        ),
-                        PositionedCarret(
-                          squareSize: squareSize,
-                        ),
-                        GridOverlay(squareSize: squareWidth),
-                      ],
-                    ),
-                  ),
+                          GridOverlay(squareSize: squareWidth),
+                        ],
+                      ),
+                    );
+                  }),
                 ),
               ],
             );

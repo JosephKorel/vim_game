@@ -31,6 +31,7 @@ class _KeyboardListenerViewState extends ConsumerState<KeyboardListenerView> {
   final _keyboardEventHandler = KeyboardEventHandler();
   @override
   void initState() {
+    print('The screen width is: ${widget.screenSize.width}');
     super.initState();
     _keyboardEventStreamController =
         _keyboardEventHandler.carretEventStream.stream.listen((event) {

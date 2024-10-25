@@ -13,8 +13,7 @@ final class CarretValidator {
   int get _maxXOffset =>
       ((screenSize.width - squareSize.width) / squareSize.width).floor();
 
-  bool _canGoRight(double carretDx) =>
-      carretDx * squareSize.width < screenSize.width;
+  bool _canGoRight(double carretDx) => carretDx < _maxXOffset;
 
   bool _canGoLeft(double carretDx) => carretDx > 0;
 
@@ -26,8 +25,6 @@ final class CarretValidator {
     required CarretEvent event,
     required CarretPosition carretPosition,
   }) {
-    print('------------------------------------');
-    print('The carret dx is: ${carretPosition.dx + event.jumpSteps}');
     if (event.goingLeft) {
       _updateHorizontalCarretPositionWhenGoingLeft(
         event: event,
@@ -37,10 +34,9 @@ final class CarretValidator {
     }
     final carretDx = carretPosition.dx + event.jumpSteps;
     final overflowed = carretDx > _maxXOffset;
-    print('The maxium offset is: $_maxXOffset');
-    print('------------------------------------');
+
     if (overflowed) {
-      _goToMaximumHorizontalOffset(event: event, carretDx: carretDx);
+      _goToMaximumHorizontalOffset(event: event, carretDx: carretPosition.dx);
     }
   }
 
@@ -67,8 +63,6 @@ final class CarretValidator {
     required double carretDx,
   }) {
     final remainingOffset = (carretDx - _maxXOffset).abs();
-    print('The maxium offset is: $_maxXOffset');
-    print('remainingOffset: $remainingOffset');
     event.updateJumpSteps(remainingOffset.toInt());
   }
 
@@ -84,11 +78,6 @@ final class CarretValidator {
     required CarretEvent event,
     required CarretPosition carretPosition,
   }) {
-    print('------------------------------------');
-    print('The current dy is: ${carretPosition.dy}');
-    print(
-        'The carret dy with jumpSteps is: ${carretPosition.dy + event.jumpSteps}');
-    print('The maximum Y offset is: $_maxYOffset');
     if (event.goingUp) {
       _updateVerticalCarretPositionWhenGoingUp(
         event: event,
@@ -100,11 +89,8 @@ final class CarretValidator {
     final carretDy = carretPosition.dy + event.jumpSteps;
     final overflowed = carretDy > _maxYOffset;
     if (overflowed) {
-      print(
-          'Its overflowing and the difference is: ${(carretDy - _maxYOffset).abs()}');
       _goToMaximumVerticalOffset(event: event, carretDy: carretPosition.dy);
     }
-    print('------------------------------------');
   }
 
   void _updateCarretJumpSteps({
