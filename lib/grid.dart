@@ -29,6 +29,9 @@ class EditorGrid extends StatelessWidget {
             return Row(
               children: [
                 LineCounter(squareSize: squareSize, maxHeight: screenHeight),
+                const SizedBox(
+                  width: 16,
+                ),
                 Expanded(
                   child: LayoutBuilder(builder: (context, constraints) {
                     return KeyboardListenerView(
@@ -38,7 +41,8 @@ class EditorGrid extends StatelessWidget {
                       child: Stack(
                         children: [
                           CustomPaint(
-                            size: Size(double.infinity, constraints.maxHeight),
+                            size: Size(
+                                constraints.maxWidth, constraints.maxHeight),
                             painter: GridPainter(
                               squareSize: squareSize,
                             ),
@@ -77,14 +81,14 @@ class GridPainter extends CustomPainter {
 
     // Draw vertical lines
     for (double x = 0; x < size.width; x += _squareWidth) {
-      final allowedHeight =
-          ((size.height / _squareHeight)).floor() * _squareHeight;
+      final height = ((size.height / _squareHeight)).floor() * _squareHeight;
 
-      canvas.drawLine(Offset(x, 0), Offset(x, allowedHeight), paint);
+      canvas.drawLine(Offset(x, 0), Offset(x, height), paint);
     }
     // Draw horizontal lines
     for (double y = 0; y < size.height; y += _squareHeight) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+      final width = (size.width / _squareWidth).floor() * _squareWidth;
+      canvas.drawLine(Offset(0, y), Offset(width, y), paint);
     }
   }
 
