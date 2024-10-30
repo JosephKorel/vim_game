@@ -4,6 +4,7 @@ import 'package:vim_game/carret.dart';
 import 'package:vim_game/keyboard_listener.dart';
 import 'package:vim_game/line_counter.dart';
 import 'package:vim_game/providers/providers.dart';
+import 'package:vim_game/target_widget.dart';
 
 class EditorGrid extends StatelessWidget {
   const EditorGrid({super.key});
@@ -51,6 +52,11 @@ class EditorGrid extends StatelessWidget {
                             squareSize: squareSize,
                           ),
                           GridOverlay(squareSize: squareWidth),
+                          Target(
+                            squareSize: squareSize,
+                            gridSize: Size(
+                                constraints.maxWidth, constraints.maxHeight),
+                          ),
                         ],
                       ),
                     );

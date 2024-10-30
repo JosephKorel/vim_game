@@ -4,8 +4,12 @@ import 'package:vim_game/providers/providers.dart';
 import 'package:vim_game/theme/utils.dart';
 
 class LineCounter extends ConsumerWidget {
-  const LineCounter(
-      {super.key, required this.squareSize, required this.maxHeight});
+  const LineCounter({
+    super.key,
+    required this.squareSize,
+    required this.maxHeight,
+  });
+
   final Size squareSize;
   final double maxHeight;
 
@@ -17,8 +21,7 @@ class LineCounter extends ConsumerWidget {
     return SizedBox(
       height: maxHeight,
       width: squareSize.width,
-      child: ListView.separated(
-        separatorBuilder: (context, index) => const SizedBox(height: 0),
+      child: ListView.builder(
         itemCount: numberOfRows,
         itemBuilder: (context, index) => SizedBox.fromSize(
           size: squareSize,
