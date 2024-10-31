@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vim_game/carret.dart';
+import 'package:vim_game/color_select.dart';
 import 'package:vim_game/keyboard_listener.dart';
 import 'package:vim_game/line_counter.dart';
 import 'package:vim_game/providers/providers.dart';
 import 'package:vim_game/target_widget.dart';
+import 'package:vim_game/theme/utils.dart';
 import 'package:vim_game/theme_switch.dart';
 
 class EditorGrid extends StatelessWidget {
@@ -17,9 +19,9 @@ class EditorGrid extends StatelessWidget {
         title: const Text('Code Editor Layout'),
         actions: const [
           ThemeSwitch(),
+          ColorSelect(),
         ],
-        backgroundColor: Colors.indigo,
-        foregroundColor: Colors.white,
+        foregroundColor: context.onSurface,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
