@@ -5,6 +5,7 @@ import 'package:vim_game/keyboard_listener.dart';
 import 'package:vim_game/line_counter.dart';
 import 'package:vim_game/providers/providers.dart';
 import 'package:vim_game/target_widget.dart';
+import 'package:vim_game/theme_switch.dart';
 
 class EditorGrid extends StatelessWidget {
   const EditorGrid({super.key});
@@ -14,6 +15,9 @@ class EditorGrid extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Code Editor Layout'),
+        actions: const [
+          ThemeSwitch(),
+        ],
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
