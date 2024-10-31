@@ -36,5 +36,34 @@ final carretProvider =
 );
 
 typedef _$Carret = AutoDisposeNotifier<CarretPosition>;
+String _$themeHash() => r'd53dc393c723e4a907b10584e9780af12fa416ea';
+
+/// See also [Theme].
+@ProviderFor(Theme)
+final themeProvider = AutoDisposeNotifierProvider<Theme, ThemeMode>.internal(
+  Theme.new,
+  name: r'themeProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$themeHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$Theme = AutoDisposeNotifier<ThemeMode>;
+String _$mainColorHash() => r'b148a1abebb5597870d36a70a5859738aac7fe2a';
+
+/// See also [MainColor].
+@ProviderFor(MainColor)
+final mainColorProvider =
+    AutoDisposeNotifierProvider<MainColor, Color>.internal(
+  MainColor.new,
+  name: r'mainColorProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$mainColorHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$MainColor = AutoDisposeNotifier<Color>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

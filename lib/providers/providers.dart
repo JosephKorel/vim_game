@@ -27,3 +27,27 @@ class Carret extends _$Carret {
     state = state.moveTo(offset);
   }
 }
+
+@riverpod
+class Theme extends _$Theme {
+  @override
+  ThemeMode build() {
+    return ThemeMode.dark;
+  }
+
+  void updateTheme(ThemeMode themeMode) {
+    state = themeMode;
+  }
+}
+
+@riverpod
+class MainColor extends _$MainColor {
+  @override
+  Color build() {
+    return Colors.indigo;
+  }
+
+  void updateMainColor(Color color) {
+    state = color;
+  }
+}
