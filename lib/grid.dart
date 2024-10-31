@@ -16,10 +16,10 @@ class EditorGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Code Editor Layout'),
+        title: const Text('Yet Another Vim Game'),
         actions: const [
-          ThemeSwitch(),
           ColorSelect(),
+          ThemeSwitch(),
         ],
         foregroundColor: context.onSurface,
       ),

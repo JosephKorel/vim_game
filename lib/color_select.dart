@@ -7,7 +7,7 @@ const _avaiableColors = [
   Colors.pink,
   Colors.purpleAccent,
   Colors.teal,
-  Colors.cyanAccent
+  Colors.blueAccent,
 ];
 
 class ColorSelect extends ConsumerWidget {
@@ -22,12 +22,17 @@ class ColorSelect extends ConsumerWidget {
     return Row(
       children: [
         for (final color in _avaiableColors)
-          Container(
-            color: color,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Container(
+              width: 16,
+              height: 16,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: color,
+              ),
+              child: InkWell(onTap: () => _onTap(ref, color)),
             ),
-            child: InkWell(onTap: () => _onTap(ref, color)),
           )
       ],
     );

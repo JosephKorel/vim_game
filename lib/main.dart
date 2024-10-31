@@ -21,6 +21,11 @@ class MyApp extends ConsumerWidget {
         useMaterial3: true,
       ),
       themeMode: themeMode,
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: mainColor, brightness: Brightness.dark),
+        useMaterial3: true,
+      ),
       home: const EditorGrid(),
     );
   }
