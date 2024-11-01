@@ -48,13 +48,20 @@ final class KeyboardEventHandler {
 
   int _jumpSteps = 1;
 
+  List<String> pressedKeys = [];
+
   void onKeyDown(KeyEvent event) {
+    if (event is KeyUpEvent) {
+      return;
+    }
+    _savePressedKey(event);
+
     if (event.isNumberKey) {
       _handleNumberKeys(event);
       return;
     }
 
-    if (!_shouldReadKey(event)) {
+    if (!event.isValidKey) {
       return;
     }
 
@@ -77,6 +84,11 @@ final class KeyboardEventHandler {
     _jumpSteps = event.physicalKey.value;
   }
 
-  bool _shouldReadKey(KeyEvent event) =>
-      event is KeyDownEvent && event.isValidKey;
+  void _savePressedKey(KeyEvent event) {
+    if (pressedKeys.length > 4) {
+      pressedKeys.removeLast();
+    }
+
+    pressedKeys.insert(0, event.logicalKey.keyLabel.toUpperCase());
+  }
 }

@@ -4,6 +4,7 @@ import 'package:vim_game/carret.dart';
 import 'package:vim_game/color_select.dart';
 import 'package:vim_game/keyboard_listener.dart';
 import 'package:vim_game/line_counter.dart';
+import 'package:vim_game/pressed_keys.dart';
 import 'package:vim_game/providers/providers.dart';
 import 'package:vim_game/target_widget.dart';
 import 'package:vim_game/theme/utils.dart';
@@ -19,58 +20,75 @@ class EditorGrid extends StatelessWidget {
         title: const Text('Yet Another Vim Game'),
         actions: const [
           ColorSelect(),
+          SizedBox(
+            width: 8,
+          ),
           ThemeSwitch(),
+          SizedBox(
+            width: 16,
+          ),
         ],
+        titleTextStyle: context.titleLarge.copyWith(
+          fontWeight: FontWeight.w600,
+          decoration: TextDecoration.underline,
+          decorationColor: context.primary,
+          decorationThickness: 2,
+        ),
         foregroundColor: context.onSurface,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final screenWidth = constraints.maxWidth;
-            final screenHeight = constraints.maxHeight;
-            final squareWidth = screenWidth / 80;
-            final squareHeight = squareWidth * 1.25;
-            final squareSize = Size(squareWidth, squareHeight);
-
-            return Row(
-              children: [
-                LineCounter(squareSize: squareSize, maxHeight: screenHeight),
-                const SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                  child: LayoutBuilder(builder: (context, constraints) {
-                    return KeyboardListenerView(
-                      screenSize:
-                          Size(constraints.maxWidth, constraints.maxHeight),
-                      squareSize: squareSize,
-                      child: Stack(
-                        children: [
-                          CustomPaint(
-                            size: Size(
-                                constraints.maxWidth, constraints.maxHeight),
-                            painter: GridPainter(
-                              squareSize: squareSize,
-                            ),
+        child: Column(
+          children: [
+            Expanded(
+              child: LayoutBuilder(builder: (context, constraints) {
+                final screenWidth = constraints.maxWidth;
+                final screenHeight = constraints.maxHeight;
+                final squareWidth = screenWidth / 80;
+                final squareHeight = squareWidth * 1.25;
+                final squareSize = Size(squareWidth, squareHeight);
+                return Row(
+                  children: [
+                    LineCounter(
+                        squareSize: squareSize, maxHeight: screenHeight),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    Expanded(
+                      child: LayoutBuilder(builder: (context, constraints) {
+                        return KeyboardListenerView(
+                          screenSize:
+                              Size(constraints.maxWidth, constraints.maxHeight),
+                          squareSize: squareSize,
+                          child: Stack(
+                            children: [
+                              CustomPaint(
+                                size: Size(constraints.maxWidth,
+                                    constraints.maxHeight),
+                                painter: GridPainter(
+                                  squareSize: squareSize,
+                                ),
+                              ),
+                              PositionedCarret(
+                                squareSize: squareSize,
+                              ),
+                              GridOverlay(squareSize: squareWidth),
+                              Target(
+                                squareSize: squareSize,
+                                gridSize: Size(constraints.maxWidth,
+                                    constraints.maxHeight),
+                              ),
+                            ],
                           ),
-                          PositionedCarret(
-                            squareSize: squareSize,
-                          ),
-                          GridOverlay(squareSize: squareWidth),
-                          Target(
-                            squareSize: squareSize,
-                            gridSize: Size(
-                                constraints.maxWidth, constraints.maxHeight),
-                          ),
-                        ],
-                      ),
-                    );
-                  }),
-                ),
-              ],
-            );
-          },
+                        );
+                      }),
+                    ),
+                  ],
+                );
+              }),
+            ),
+            const PressedKeys(),
+          ],
         ),
       ),
     );

@@ -36,7 +36,7 @@ final carretProvider =
 );
 
 typedef _$Carret = AutoDisposeNotifier<CarretPosition>;
-String _$themeHash() => r'd53dc393c723e4a907b10584e9780af12fa416ea';
+String _$themeHash() => r'69e4c75d5051bd37071d58352bb78f322f5ca808';
 
 /// See also [Theme].
 @ProviderFor(Theme)
@@ -50,7 +50,7 @@ final themeProvider = AutoDisposeNotifierProvider<Theme, ThemeMode>.internal(
 );
 
 typedef _$Theme = AutoDisposeNotifier<ThemeMode>;
-String _$mainColorHash() => r'b148a1abebb5597870d36a70a5859738aac7fe2a';
+String _$mainColorHash() => r'd166bdb9927606e9fe131cf65acbfe74b1e8018e';
 
 /// See also [MainColor].
 @ProviderFor(MainColor)
@@ -65,5 +65,20 @@ final mainColorProvider =
 );
 
 typedef _$MainColor = AutoDisposeNotifier<Color>;
+String _$keyObserverHash() => r'4ff5627d1027c398e4e39e93c3c9882f201d3a73';
+
+/// See also [KeyObserver].
+@ProviderFor(KeyObserver)
+final keyObserverProvider =
+    AutoDisposeNotifierProvider<KeyObserver, List<String>>.internal(
+  KeyObserver.new,
+  name: r'keyObserverProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$keyObserverHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$KeyObserver = AutoDisposeNotifier<List<String>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

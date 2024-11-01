@@ -20,6 +20,7 @@ class MyApp extends ConsumerWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: mainColor),
         useMaterial3: true,
       ),
+      debugShowCheckedModeBanner: false,
       themeMode: themeMode,
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(

@@ -51,3 +51,15 @@ class MainColor extends _$MainColor {
     state = color;
   }
 }
+
+@riverpod
+class KeyObserver extends _$KeyObserver {
+  @override
+  List<String> build() {
+    return [];
+  }
+
+  void updateList(List<String> keys) {
+    state = [...keys];
+  }
+}

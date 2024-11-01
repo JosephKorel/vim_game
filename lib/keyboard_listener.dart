@@ -29,9 +29,22 @@ class _KeyboardListenerViewState extends ConsumerState<KeyboardListenerView> {
   late final StreamSubscription<CarretEvent> _keyboardEventStreamController;
   final _focusNode = FocusNode();
   final _keyboardEventHandler = KeyboardEventHandler();
+
+  void _moveCarret(CarretEvent event) {
+    final carretPosition = ref.read(carretProvider);
+    ref.read(carretProvider.notifier).updateCarretPosition(
+          event.moveTo(carretPosition.offset),
+        );
+  }
+
+  void _updatedPressedKeys() {
+    ref
+        .read(keyObserverProvider.notifier)
+        .updateList(_keyboardEventHandler.pressedKeys);
+  }
+
   @override
   void initState() {
-    print('The screen width is: ${widget.screenSize.width}');
     super.initState();
     _keyboardEventStreamController =
         _keyboardEventHandler.carretEventStream.stream.listen((event) {
@@ -47,13 +60,6 @@ class _KeyboardListenerViewState extends ConsumerState<KeyboardListenerView> {
     });
   }
 
-  void _moveCarret(CarretEvent event) {
-    final carretPosition = ref.read(carretProvider);
-    ref.read(carretProvider.notifier).updateCarretPosition(
-          event.moveTo(carretPosition.offset),
-        );
-  }
-
   @override
   void dispose() {
     _focusNode.dispose();
@@ -63,10 +69,14 @@ class _KeyboardListenerViewState extends ConsumerState<KeyboardListenerView> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(keyObserverProvider);
     return KeyboardListener(
       autofocus: true,
       focusNode: _focusNode,
-      onKeyEvent: _keyboardEventHandler.onKeyDown,
+      onKeyEvent: (event) {
+        _keyboardEventHandler.onKeyDown(event);
+        _updatedPressedKeys();
+      },
       child: widget.child,
     );
   }

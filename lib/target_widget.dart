@@ -23,7 +23,7 @@ class _TargetState extends ConsumerState<Target> {
   void _updateTargetPosition() {
     setState(() {
       _target =
-          GameTarget.randomizeY(_target.offset.dx, minValue: 0, maxValue: 10);
+          GameTarget.randomizeY(_target.offset.dx, minValue: 1, maxValue: 10);
     });
   }
 
