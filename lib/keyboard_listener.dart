@@ -6,6 +6,7 @@ import 'package:vim_game/carret_validator.dart';
 import 'package:vim_game/key_event.dart';
 import 'package:vim_game/key_recorder.dart';
 import 'package:vim_game/keyboard_handler.dart';
+import 'package:vim_game/keyboard_listener_mixin.dart';
 import 'package:vim_game/providers/providers.dart';
 
 class KeyboardListenerView extends ConsumerStatefulWidget {
@@ -24,19 +25,17 @@ class KeyboardListenerView extends ConsumerStatefulWidget {
       _KeyboardListenerViewState();
 }
 
-class _KeyboardListenerViewState extends ConsumerState<KeyboardListenerView> {
+class _KeyboardListenerViewState extends ConsumerState<KeyboardListenerView>
+    with KeyboardEventListener {
   late final _cursorValidator = CursorEventValidator(
     screenSize: widget.screenSize,
     squareSize: widget.squareSize,
   );
+
   late final StreamSubscription<CursorEvent> _cursorEventStreamController;
   final _focusNode = FocusNode();
   final _keyboardEventHandler = KeyboardEventHandler();
   final _keyWatcher = KeyWatcher();
-
-  void _moveCursor(Offset offset) {
-    ref.read(carretProvider.notifier).updateCarretPosition(offset);
-  }
 
   void _updatedPressedKeys(List<String> pressedKeys) {
     ref.read(keyObserverProvider.notifier).updateList(pressedKeys);
@@ -48,20 +47,14 @@ class _KeyboardListenerViewState extends ConsumerState<KeyboardListenerView> {
   }
 
   @override
+  CursorEventValidator get cursorValidator => _cursorValidator;
+
+  @override
   void initState() {
     super.initState();
     _cursorEventStreamController =
         _keyboardEventHandler.cursorEventStream.stream.listen((event) {
-      if (event is! NavigationEvent) {
-        return;
-      }
-      final carretPosition = ref.read(carretProvider);
-      final offsetToMove = _cursorValidator.validateAndUpdate(
-        event: event,
-        currentCursorPosition: carretPosition.offset,
-      );
-
-      _moveCursor(offsetToMove);
+      onCursorEvent(event);
     });
   }
 
