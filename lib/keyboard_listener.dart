@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vim_game/carret_event.dart';
 import 'package:vim_game/carret_validator.dart';
 import 'package:vim_game/key_event.dart';
+import 'package:vim_game/key_recorder.dart';
 import 'package:vim_game/keyboard_handler.dart';
 import 'package:vim_game/providers/providers.dart';
 
@@ -25,32 +25,26 @@ class KeyboardListenerView extends ConsumerStatefulWidget {
 }
 
 class _KeyboardListenerViewState extends ConsumerState<KeyboardListenerView> {
-  late final _carretValidator = CarretValidator(
-      screenSize: widget.screenSize, squareSize: widget.squareSize);
   late final _cursorValidator = CursorEventValidator(
     screenSize: widget.screenSize,
     squareSize: widget.squareSize,
   );
-  late final StreamSubscription<CarretEvent> _keyboardEventStreamController;
   late final StreamSubscription<CursorEvent> _cursorEventStreamController;
   final _focusNode = FocusNode();
   final _keyboardEventHandler = KeyboardEventHandler();
-
-  void _moveCarret(CarretEvent event) {
-    final carretPosition = ref.read(carretProvider);
-    ref.read(carretProvider.notifier).updateCarretPosition(
-          event.moveTo(carretPosition.offset),
-        );
-  }
+  final _keyWatcher = KeyWatcher();
 
   void _moveCursor(Offset offset) {
     ref.read(carretProvider.notifier).updateCarretPosition(offset);
   }
 
-  void _updatedPressedKeys() {
-    ref
-        .read(keyObserverProvider.notifier)
-        .updateList(_keyboardEventHandler.pressedKeys);
+  void _updatedPressedKeys(List<String> pressedKeys) {
+    ref.read(keyObserverProvider.notifier).updateList(pressedKeys);
+  }
+
+  void _watchKey(KeyEvent event) {
+    final pressedKeys = (_keyWatcher..onKeyDown(event)).pressedKeys;
+    _updatedPressedKeys(pressedKeys);
   }
 
   @override
@@ -67,30 +61,13 @@ class _KeyboardListenerViewState extends ConsumerState<KeyboardListenerView> {
         currentCursorPosition: carretPosition.offset,
       );
 
-      print('I should be moving to this offset: $offsetToMove');
       _moveCursor(offsetToMove);
-
-      print('Cursor event: $event');
-    });
-
-    _keyboardEventStreamController =
-        _keyboardEventHandler.carretEventStream.stream.listen((event) {
-      // final carretPosition = ref.read(carretProvider);
-      // final shouldMoveCarret = _carretValidator.shouldMove(
-      //   event: event,
-      //   carretPosition: carretPosition,
-      // );
-      // if (!shouldMoveCarret) {
-      //   return;
-      // }
-      // _moveCarret(event);
     });
   }
 
   @override
   void dispose() {
     _focusNode.dispose();
-    _keyboardEventStreamController.cancel();
     _cursorEventStreamController.cancel();
     super.dispose();
   }
@@ -102,8 +79,8 @@ class _KeyboardListenerViewState extends ConsumerState<KeyboardListenerView> {
       autofocus: true,
       focusNode: _focusNode,
       onKeyEvent: (event) {
+        _watchKey(event);
         _keyboardEventHandler.onKeyDown(event);
-        _updatedPressedKeys();
       },
       child: widget.child,
     );

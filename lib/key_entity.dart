@@ -1,6 +1,17 @@
 import 'package:flutter/services.dart';
 import 'package:vim_game/key_event.dart';
-import 'package:vim_game/keyboard_handler.dart';
+
+final _numberKeys = {
+  PhysicalKeyboardKey.digit1,
+  PhysicalKeyboardKey.digit2,
+  PhysicalKeyboardKey.digit3,
+  PhysicalKeyboardKey.digit4,
+  PhysicalKeyboardKey.digit5,
+  PhysicalKeyboardKey.digit6,
+  PhysicalKeyboardKey.digit7,
+  PhysicalKeyboardKey.digit8,
+  PhysicalKeyboardKey.digit9,
+};
 
 extension on PhysicalKeyboardKey {
   int get value => switch (this) {
@@ -43,7 +54,7 @@ final class NumberKey extends KeyEntity {
 
   @override
   bool isSameKey(KeyEvent event) {
-    final isNumberKey = numberKeys.contains(event.physicalKey);
+    final isNumberKey = _numberKeys.contains(event.physicalKey);
     if (isNumberKey) {
       stepsToMove = event.physicalKey.value;
     }

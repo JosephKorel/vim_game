@@ -1,57 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:vim_game/carret_event.dart';
 import 'package:vim_game/key_entity.dart';
 import 'package:vim_game/key_event.dart';
 
-final numberKeys = {
-  PhysicalKeyboardKey.digit1,
-  PhysicalKeyboardKey.digit2,
-  PhysicalKeyboardKey.digit3,
-  PhysicalKeyboardKey.digit4,
-  PhysicalKeyboardKey.digit5,
-  PhysicalKeyboardKey.digit6,
-  PhysicalKeyboardKey.digit7,
-  PhysicalKeyboardKey.digit8,
-  PhysicalKeyboardKey.digit9,
-};
-
-final _validKeys = {
-  LogicalKeyboardKey.keyH,
-  LogicalKeyboardKey.keyL,
-  LogicalKeyboardKey.keyJ,
-  LogicalKeyboardKey.keyK
-};
-
-extension on KeyEvent {
-  bool get isNumberKey => numberKeys.contains(physicalKey);
-
-  bool get isValidKey => _validKeys.contains(logicalKey);
-}
-
-extension on PhysicalKeyboardKey {
-  int get value => switch (this) {
-        PhysicalKeyboardKey.digit1 => 1,
-        PhysicalKeyboardKey.digit2 => 2,
-        PhysicalKeyboardKey.digit3 => 3,
-        PhysicalKeyboardKey.digit4 => 4,
-        PhysicalKeyboardKey.digit5 => 5,
-        PhysicalKeyboardKey.digit6 => 6,
-        PhysicalKeyboardKey.digit7 => 7,
-        PhysicalKeyboardKey.digit8 => 8,
-        PhysicalKeyboardKey.digit9 => 9,
-        _ => throw UnimplementedError(),
-      };
-}
-
 final class KeyboardEventHandler {
-  final carretEventStream = StreamController<CarretEvent>();
   final cursorEventStream = StreamController<CursorEvent>();
 
   KeyEntity? _lastPressedKey;
-
-  int _jumpSteps = 1;
 
   List<String> pressedKeys = [];
 
@@ -60,47 +16,12 @@ final class KeyboardEventHandler {
       return;
     }
 
-    final cursorEvent = entityKeys
-            .where((element) => element.isSameKey(event))
-            .firstOrNull
-            ?.perform(_lastPressedKey) ??
-        const CursorEvent();
+    final pressedKey =
+        entityKeys.where((element) => element.isSameKey(event)).firstOrNull;
 
-    cursorEventStream.add(cursorEvent);
+    cursorEventStream
+        .add(pressedKey?.perform(_lastPressedKey) ?? const CursorEvent());
 
-    if (event.isNumberKey) {
-      _handleNumberKeys(event);
-      return;
-    }
-
-    if (!event.isValidKey) {
-      return;
-    }
-
-    (switch (event.logicalKey) {
-      LogicalKeyboardKey.keyH =>
-        carretEventStream.add(GoLeftCarrentEvent(jumpSteps: _jumpSteps)),
-      LogicalKeyboardKey.keyL =>
-        carretEventStream.add(GoRightCarrentEvent(jumpSteps: _jumpSteps)),
-      LogicalKeyboardKey.keyJ =>
-        carretEventStream.add(GoDownCarrentEvent(jumpSteps: _jumpSteps)),
-      LogicalKeyboardKey.keyK =>
-        carretEventStream.add(GoUpCarrentEvent(jumpSteps: _jumpSteps)),
-      _ => () {}
-    });
-
-    _jumpSteps = 1;
-  }
-
-  void _handleNumberKeys(KeyEvent event) {
-    _jumpSteps = event.physicalKey.value;
-  }
-
-  void _savePressedKey(KeyEvent event) {
-    if (pressedKeys.length > 4) {
-      pressedKeys.removeLast();
-    }
-
-    pressedKeys.insert(0, event.logicalKey.keyLabel.toUpperCase());
+    _lastPressedKey = pressedKey;
   }
 }

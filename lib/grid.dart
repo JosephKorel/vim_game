@@ -75,8 +75,10 @@ class EditorGrid extends StatelessWidget {
                               GridOverlay(squareSize: squareWidth),
                               Target(
                                 squareSize: squareSize,
-                                gridSize: Size(constraints.maxWidth,
-                                    constraints.maxHeight),
+                                gridSize: Size(
+                                  constraints.maxWidth,
+                                  constraints.maxHeight,
+                                ),
                               ),
                             ],
                           ),
