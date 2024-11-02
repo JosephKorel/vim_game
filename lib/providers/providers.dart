@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vim_game/carret_position.dart';
+import 'package:vim_game/mode.dart';
 
 part 'providers.g.dart';
 
@@ -61,5 +62,17 @@ class KeyObserver extends _$KeyObserver {
 
   void updateList(List<String> keys) {
     state = [...keys];
+  }
+}
+
+@riverpod
+class Mode extends _$Mode {
+  @override
+  VimMode build() {
+    return VimMode.normal;
+  }
+
+  void updateMode(VimMode mode) {
+    state = mode;
   }
 }

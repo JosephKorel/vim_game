@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:vim_game/carret_event.dart';
+import 'package:vim_game/key_entity.dart';
+import 'package:vim_game/key_event.dart';
 
-final _numberKeys = {
+final numberKeys = {
   PhysicalKeyboardKey.digit1,
   PhysicalKeyboardKey.digit2,
   PhysicalKeyboardKey.digit3,
@@ -23,7 +25,7 @@ final _validKeys = {
 };
 
 extension on KeyEvent {
-  bool get isNumberKey => _numberKeys.contains(physicalKey);
+  bool get isNumberKey => numberKeys.contains(physicalKey);
 
   bool get isValidKey => _validKeys.contains(logicalKey);
 }
@@ -45,6 +47,9 @@ extension on PhysicalKeyboardKey {
 
 final class KeyboardEventHandler {
   final carretEventStream = StreamController<CarretEvent>();
+  final cursorEventStream = StreamController<CursorEvent>();
+
+  KeyEntity? _lastPressedKey;
 
   int _jumpSteps = 1;
 
@@ -54,7 +59,14 @@ final class KeyboardEventHandler {
     if (event is KeyUpEvent) {
       return;
     }
-    _savePressedKey(event);
+
+    final cursorEvent = entityKeys
+            .where((element) => element.isSameKey(event))
+            .firstOrNull
+            ?.perform(_lastPressedKey) ??
+        const CursorEvent();
+
+    cursorEventStream.add(cursorEvent);
 
     if (event.isNumberKey) {
       _handleNumberKeys(event);

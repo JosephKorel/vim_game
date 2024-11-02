@@ -80,5 +80,19 @@ final keyObserverProvider =
 );
 
 typedef _$KeyObserver = AutoDisposeNotifier<List<String>>;
+String _$modeHash() => r'74d9171c77a684d943cdc8c2ff0d11a326051e3b';
+
+/// See also [Mode].
+@ProviderFor(Mode)
+final modeProvider = AutoDisposeNotifierProvider<Mode, VimMode>.internal(
+  Mode.new,
+  name: r'modeProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$modeHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$Mode = AutoDisposeNotifier<VimMode>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

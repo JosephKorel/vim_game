@@ -1,0 +1,1 @@
+enum VimMode { normal, insert }

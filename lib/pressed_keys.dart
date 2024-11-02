@@ -8,6 +8,9 @@ class PressedKeys extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pressedKeys = ref.watch(keyObserverProvider);
+
+    if (pressedKeys.isEmpty) return const Text('');
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [

@@ -1,5 +1,38 @@
 import 'package:flutter/material.dart';
 
+sealed class CarretEventType {
+  const CarretEventType();
+}
+
+final class NumberPressedEventType extends CarretEventType {
+  const NumberPressedEventType({required this.number});
+  final int number;
+}
+
+final class GoRightCarrentEventType extends CarretEventType {
+  const GoRightCarrentEventType({required this.offset});
+  final Offset offset;
+}
+
+abstract class KeyboardEvent {
+  bool get act => false;
+  CarretEventType eventType = throw UnimplementedError();
+
+  void handle();
+}
+
+final class NumberDecorator extends KeyboardEvent {
+  NumberDecorator({required this.event, required this.pressedNumber});
+
+  @override
+  void handle() {
+    eventType = NumberPressedEventType(number: pressedNumber);
+  }
+
+  final KeyboardEvent event;
+  final int pressedNumber;
+}
+
 base class CarretEvent {
   CarretEvent({this.jumpSteps = 1});
 

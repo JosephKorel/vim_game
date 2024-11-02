@@ -14,11 +14,12 @@ class Carret extends StatefulWidget {
 }
 
 class _CarretState extends State<Carret> {
+  late final Timer _timer;
   bool _active = false;
 
   static const timerDuration = Duration(milliseconds: 400);
   void _tickCarret() {
-    Timer.periodic(timerDuration, (_) {
+    _timer = Timer.periodic(timerDuration, (_) {
       setState(() {
         _active = !_active;
       });
@@ -27,8 +28,14 @@ class _CarretState extends State<Carret> {
 
   @override
   void initState() {
-    _tickCarret();
     super.initState();
+    _tickCarret();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
