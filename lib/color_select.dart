@@ -31,7 +31,10 @@ class ColorSelect extends ConsumerWidget {
                 shape: BoxShape.circle,
                 color: color,
               ),
-              child: InkWell(onTap: () => _onTap(ref, color)),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () => _onTap(ref, color),
+              ),
             ),
           )
       ],
