@@ -116,10 +116,36 @@ final class DownKey extends NavigationKey {
   }
 }
 
+final class EnterInsertAfterModeKey extends KeyEntity {
+  const EnterInsertAfterModeKey();
+
+  @override
+  LogicalKeyboardKey get _key => LogicalKeyboardKey.keyA;
+
+  @override
+  CursorEvent perform(KeyEntity? previousKey) {
+    return const SwitchVimModeEvent();
+  }
+}
+
+final class EnterNormalModeKey extends KeyEntity {
+  const EnterNormalModeKey();
+
+  @override
+  LogicalKeyboardKey get _key => LogicalKeyboardKey.escape;
+
+  @override
+  CursorEvent perform(KeyEntity? previousKey) {
+    return const SwitchVimModeEvent();
+  }
+}
+
 final List<KeyEntity> entityKeys = [
   NumberKey(),
   const LeftKey(),
   const RightKey(),
   const UpKey(),
-  const DownKey()
+  const DownKey(),
+  const EnterInsertAfterModeKey(),
+  const EnterNormalModeKey(),
 ];

@@ -55,3 +55,7 @@ final class GoDownEvent extends NavigationEvent {
   NavigationEvent withUpdatedSteps(int updatedSteps) =>
       GoDownEvent(updatedSteps);
 }
+
+final class SwitchVimModeEvent extends CursorEvent {
+  const SwitchVimModeEvent();
+}

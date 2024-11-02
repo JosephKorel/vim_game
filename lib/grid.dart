@@ -6,10 +6,10 @@ import 'package:vim_game/keyboard_listener.dart';
 import 'package:vim_game/line_counter.dart';
 import 'package:vim_game/pressed_keys.dart';
 import 'package:vim_game/providers/providers.dart';
-import 'package:vim_game/score_widget.dart';
 import 'package:vim_game/target_widget.dart';
 import 'package:vim_game/theme/utils.dart';
 import 'package:vim_game/theme_switch.dart';
+import 'package:vim_game/vim_mode_widget.dart';
 
 class EditorGrid extends StatelessWidget {
   const EditorGrid({super.key});
@@ -73,7 +73,7 @@ class EditorGrid extends StatelessWidget {
                                     squareSize: squareSize,
                                   ),
                                 ),
-                                PositionedCarret(
+                                CursorDisplay(
                                   squareSize: squareSize,
                                 ),
                                 GridOverlay(squareSize: squareWidth),
@@ -100,8 +100,9 @@ class EditorGrid extends StatelessWidget {
                   // Plus a sized box separating it from the grid
                   Padding(
                     padding: EdgeInsets.only(left: squareWidth + 16),
-                    child: const ScoreWidget(),
+                    child: const VimModeWidget(),
                   ),
+                  // const VimModeWidget(),
                   const PressedKeys(),
                 ],
               ),
