@@ -27,16 +27,21 @@ class _TargetState extends ConsumerState<Target> {
     });
   }
 
-  void _onCarretPositionChange(Offset carretOffset) {
+  void _onCursorPositionChange(Offset carretOffset) {
     if (_carretOffsetMatchesTarget(carretOffset)) {
+      _setScore();
       _updateTargetPosition();
     }
+  }
+
+  void _setScore() {
+    ref.read(scoreProvider.notifier).incrementScore();
   }
 
   @override
   Widget build(BuildContext context) {
     ref.listen(carretProvider, (previous, next) {
-      _onCarretPositionChange(next.offset);
+      _onCursorPositionChange(next.offset);
     });
 
     final left = _target.offset.dx * widget.squareSize.width;

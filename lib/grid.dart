@@ -6,6 +6,7 @@ import 'package:vim_game/keyboard_listener.dart';
 import 'package:vim_game/line_counter.dart';
 import 'package:vim_game/pressed_keys.dart';
 import 'package:vim_game/providers/providers.dart';
+import 'package:vim_game/score_widget.dart';
 import 'package:vim_game/target_widget.dart';
 import 'package:vim_game/theme/utils.dart';
 import 'package:vim_game/theme_switch.dart';
@@ -38,60 +39,75 @@ class EditorGrid extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: Column(
-          children: [
-            Expanded(
-              child: LayoutBuilder(builder: (context, constraints) {
-                final screenWidth = constraints.maxWidth;
-                final screenHeight = constraints.maxHeight;
-                final squareWidth = screenWidth / 80;
-                final squareHeight = squareWidth * 1.25;
-                final squareSize = Size(squareWidth, squareHeight);
-                return Row(
-                  children: [
-                    LineCounter(
-                        squareSize: squareSize, maxHeight: screenHeight),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                    Expanded(
-                      child: LayoutBuilder(builder: (context, constraints) {
-                        return KeyboardListenerView(
-                          screenSize:
-                              Size(constraints.maxWidth, constraints.maxHeight),
+        child: LayoutBuilder(builder: (context, constraints) {
+          final screenWidth = constraints.maxWidth;
+          final squareWidth = screenWidth / 80;
+          final squareHeight = squareWidth * 1.25;
+          final squareSize = Size(squareWidth, squareHeight);
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Row(
+                      children: [
+                        LineCounter(
                           squareSize: squareSize,
-                          child: Stack(
-                            children: [
-                              CustomPaint(
-                                size: Size(constraints.maxWidth,
-                                    constraints.maxHeight),
-                                painter: GridPainter(
+                          maxHeight: constraints.maxHeight,
+                        ),
+                        const SizedBox(
+                          width: 16,
+                        ),
+                        Expanded(
+                          child: KeyboardListenerView(
+                            screenSize: Size(
+                                constraints.maxWidth, constraints.maxHeight),
+                            squareSize: squareSize,
+                            child: Stack(
+                              children: [
+                                CustomPaint(
+                                  size: Size(constraints.maxWidth,
+                                      constraints.maxHeight),
+                                  painter: GridPainter(
+                                    squareSize: squareSize,
+                                  ),
+                                ),
+                                PositionedCarret(
                                   squareSize: squareSize,
                                 ),
-                              ),
-                              PositionedCarret(
-                                squareSize: squareSize,
-                              ),
-                              GridOverlay(squareSize: squareWidth),
-                              Target(
-                                squareSize: squareSize,
-                                gridSize: Size(
-                                  constraints.maxWidth,
-                                  constraints.maxHeight,
+                                GridOverlay(squareSize: squareWidth),
+                                Target(
+                                  squareSize: squareSize,
+                                  gridSize: Size(
+                                    constraints.maxWidth,
+                                    constraints.maxHeight,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        );
-                      }),
-                    ),
-                  ],
-                );
-              }),
-            ),
-            const PressedKeys(),
-          ],
-        ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // The line widget's width is the same as the square width
+                  // Plus a sized box separating it from the grid
+                  Padding(
+                    padding: EdgeInsets.only(left: squareWidth + 16),
+                    child: const ScoreWidget(),
+                  ),
+                  const PressedKeys(),
+                ],
+              ),
+            ],
+          );
+        }),
       ),
     );
   }

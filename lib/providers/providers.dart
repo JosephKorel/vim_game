@@ -76,3 +76,15 @@ class Mode extends _$Mode {
     state = mode;
   }
 }
+
+@riverpod
+class Score extends _$Score {
+  @override
+  int build() {
+    return 0;
+  }
+
+  void incrementScore() {
+    state++;
+  }
+}
