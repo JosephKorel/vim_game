@@ -80,7 +80,7 @@ final keyObserverProvider =
 );
 
 typedef _$KeyObserver = AutoDisposeNotifier<List<String>>;
-String _$modeHash() => r'4cfa5c3e6026c6ff04034d7a055c2bc6dfae20bf';
+String _$modeHash() => r'ca9c18deccf1049430fe2ebaa5a8bfb7c35e974b';
 
 /// See also [Mode].
 @ProviderFor(Mode)

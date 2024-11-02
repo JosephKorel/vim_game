@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:vim_game/key_event.dart';
+import 'package:vim_game/mode.dart';
 
 final _numberKeys = {
   PhysicalKeyboardKey.digit1,
@@ -124,7 +125,7 @@ final class EnterInsertAfterModeKey extends KeyEntity {
 
   @override
   CursorEvent perform(KeyEntity? previousKey) {
-    return const SwitchVimModeEvent();
+    return const SwitchVimModeEvent(VimMode.insert);
   }
 }
 
@@ -136,7 +137,7 @@ final class EnterNormalModeKey extends KeyEntity {
 
   @override
   CursorEvent perform(KeyEntity? previousKey) {
-    return const SwitchVimModeEvent();
+    return const SwitchVimModeEvent(VimMode.normal);
   }
 }
 

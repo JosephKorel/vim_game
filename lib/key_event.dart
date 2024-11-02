@@ -1,3 +1,5 @@
+import 'package:vim_game/mode.dart';
+
 base class CursorEvent {
   const CursorEvent();
 }
@@ -57,5 +59,7 @@ final class GoDownEvent extends NavigationEvent {
 }
 
 final class SwitchVimModeEvent extends CursorEvent {
-  const SwitchVimModeEvent();
+  const SwitchVimModeEvent(this.vimMode);
+
+  final VimMode vimMode;
 }

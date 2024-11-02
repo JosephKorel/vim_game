@@ -8,8 +8,8 @@ mixin KeyboardEventListener<T extends ConsumerStatefulWidget>
     on ConsumerState<T> {
   CursorEventValidator get cursorValidator;
 
-  void _switchVimMode() {
-    ref.read(modeProvider.notifier).switchMode();
+  void _switchVimMode(SwitchVimModeEvent event) {
+    ref.read(modeProvider.notifier).switchMode(event.vimMode);
   }
 
   void _handleNavigationEvent(NavigationEvent event) {
@@ -24,14 +24,10 @@ mixin KeyboardEventListener<T extends ConsumerStatefulWidget>
 
   void onCursorEvent(CursorEvent event) {
     (switch (event) {
-      SwitchVimModeEvent() => _switchVimMode(),
+      SwitchVimModeEvent() => _switchVimMode(event),
       NavigationEvent() => _handleNavigationEvent(event),
       _ => () {}
     });
-
-    // if (event is SwitchVimModeEvent) {
-    //   _switchVimMode();
-    // }
   }
 
   void _moveCursor(Offset offset) {

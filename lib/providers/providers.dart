@@ -72,8 +72,8 @@ class Mode extends _$Mode {
     return VimMode.normal;
   }
 
-  void switchMode() {
-    state = (state == VimMode.normal) ? VimMode.insert : VimMode.normal;
+  void switchMode(VimMode mode) {
+    state = mode;
   }
 }
 

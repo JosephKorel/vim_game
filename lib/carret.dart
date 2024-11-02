@@ -66,17 +66,13 @@ class CursorDisplay extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final offset = ref.watch(carretProvider);
     final vimMode = ref.watch(modeProvider);
-    return Stack(
-      children: [
-        Positioned(
-          left: offset.dx * squareSize.width,
-          top: offset.dy * (squareSize.height),
-          child: Carret(
-            squareSize: squareSize,
-            vimMode: vimMode,
-          ),
-        ),
-      ],
+    return Positioned(
+      left: offset.dx * squareSize.width,
+      top: offset.dy * (squareSize.height),
+      child: Carret(
+        squareSize: squareSize,
+        vimMode: vimMode,
+      ),
     );
   }
 }
