@@ -22,10 +22,24 @@ mixin KeyboardEventListener<T extends ConsumerStatefulWidget>
     _moveCursor(offsetToMove);
   }
 
+  void _handleWordNavigationEvent(WordNavigationEvent event) {
+    (switch (event) {
+      AdvanceToEndOfNextWordEvent() => _goToEndOfNextWord(),
+      _ => () {}
+    });
+  }
+
+  void _goToEndOfNextWord() {
+    final sentence = ref.read(sentenceProvider);
+    final nextWordEndOffset = sentence.endOfWordOffset();
+    _moveCursor(nextWordEndOffset);
+  }
+
   void onCursorEvent(CursorEvent event) {
     (switch (event) {
       SwitchVimModeEvent() => _switchVimMode(event),
       NavigationEvent() => _handleNavigationEvent(event),
+      WordNavigationEvent() => _handleWordNavigationEvent(event),
       _ => () {}
     });
   }

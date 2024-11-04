@@ -141,6 +141,18 @@ final class EnterNormalModeKey extends KeyEntity {
   }
 }
 
+final class AdvanceToEndOfNextWordKey extends KeyEntity {
+  const AdvanceToEndOfNextWordKey();
+
+  @override
+  LogicalKeyboardKey get _key => LogicalKeyboardKey.keyE;
+
+  @override
+  CursorEvent perform(KeyEntity? previousKey) {
+    return const AdvanceToEndOfNextWordEvent();
+  }
+}
+
 final List<KeyEntity> entityKeys = [
   NumberKey(),
   const LeftKey(),
@@ -149,4 +161,5 @@ final List<KeyEntity> entityKeys = [
   const DownKey(),
   const EnterInsertAfterModeKey(),
   const EnterNormalModeKey(),
+  const AdvanceToEndOfNextWordKey(),
 ];

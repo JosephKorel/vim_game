@@ -15,6 +15,10 @@ base class NavigationEvent extends CursorEvent {
   NavigationEvent withUpdatedSteps(int updatedSteps) => this;
 }
 
+base class WordNavigationEvent extends CursorEvent {
+  const WordNavigationEvent();
+}
+
 final class GoLeftEvent extends NavigationEvent {
   const GoLeftEvent(super.stepsToMove);
 
@@ -62,4 +66,8 @@ final class SwitchVimModeEvent extends CursorEvent {
   const SwitchVimModeEvent(this.vimMode);
 
   final VimMode vimMode;
+}
+
+final class AdvanceToEndOfNextWordEvent extends WordNavigationEvent {
+  const AdvanceToEndOfNextWordEvent();
 }

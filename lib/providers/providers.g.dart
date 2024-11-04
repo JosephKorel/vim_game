@@ -108,5 +108,20 @@ final scoreProvider = AutoDisposeNotifierProvider<Score, int>.internal(
 );
 
 typedef _$Score = AutoDisposeNotifier<int>;
+String _$sentenceHash() => r'ad949121cf49ddf2f936679450210e7b42fa7d4e';
+
+/// See also [Sentence].
+@ProviderFor(Sentence)
+final sentenceProvider =
+    AutoDisposeNotifierProvider<Sentence, SentenceEntity>.internal(
+  Sentence.new,
+  name: r'sentenceProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$sentenceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$Sentence = AutoDisposeNotifier<SentenceEntity>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

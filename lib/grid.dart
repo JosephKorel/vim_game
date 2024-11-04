@@ -6,7 +6,7 @@ import 'package:vim_game/keyboard_listener.dart';
 import 'package:vim_game/line_counter.dart';
 import 'package:vim_game/pressed_keys.dart';
 import 'package:vim_game/providers/providers.dart';
-import 'package:vim_game/target_widget.dart';
+import 'package:vim_game/sentence_widget.dart';
 import 'package:vim_game/theme/utils.dart';
 import 'package:vim_game/theme_switch.dart';
 import 'package:vim_game/vim_mode_widget.dart';
@@ -71,19 +71,21 @@ class EditorGrid extends StatelessWidget {
                                       constraints.maxHeight),
                                   painter: GridPainter(
                                     squareSize: squareSize,
+                                    context: context,
                                   ),
                                 ),
                                 CursorDisplay(
                                   squareSize: squareSize,
                                 ),
                                 GridOverlay(squareSize: squareWidth),
-                                Target(
-                                  squareSize: squareSize,
-                                  gridSize: Size(
-                                    constraints.maxWidth,
-                                    constraints.maxHeight,
-                                  ),
-                                ),
+                                // Target(
+                                //   squareSize: squareSize,
+                                //   gridSize: Size(
+                                //     constraints.maxWidth,
+                                //     constraints.maxHeight,
+                                //   ),
+                                // ),
+                                SentenceWidget(squareSize: squareSize),
                               ],
                             ),
                           ),
@@ -116,8 +118,9 @@ class EditorGrid extends StatelessWidget {
 
 class GridPainter extends CustomPainter {
   final Size squareSize;
+  final BuildContext context;
 
-  GridPainter({required this.squareSize});
+  GridPainter({required this.squareSize, required this.context});
 
   double get _squareWidth => squareSize.width;
   double get _squareHeight => squareSize.height;
@@ -125,7 +128,7 @@ class GridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.grey
+      ..color = context.primary.withOpacity(0.2)
       ..strokeWidth = 0.5;
 
     // Draw vertical lines

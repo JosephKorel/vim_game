@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vim_game/carret_position.dart';
 import 'package:vim_game/mode.dart';
+import 'package:vim_game/sentence_entity.dart';
 
 part 'providers.g.dart';
 
@@ -86,5 +87,13 @@ class Score extends _$Score {
 
   void incrementScore() {
     state++;
+  }
+}
+
+@riverpod
+class Sentence extends _$Sentence {
+  @override
+  SentenceEntity build() {
+    return const SentenceEntity.initialValue();
   }
 }
