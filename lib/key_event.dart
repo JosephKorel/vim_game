@@ -71,3 +71,7 @@ final class SwitchVimModeEvent extends CursorEvent {
 final class AdvanceToEndOfNextWordEvent extends WordNavigationEvent {
   const AdvanceToEndOfNextWordEvent();
 }
+
+final class AdvanceToBeginningOfPreviousWordEvent extends WordNavigationEvent {
+  const AdvanceToBeginningOfPreviousWordEvent();
+}
