@@ -15,7 +15,7 @@ final class SentenceEntity {
   final String text;
   final Offset startingPoisition;
 
-  double get dxOfLastWord {
+  double get beginningOfLastWordDx {
     final splitWords = text.split(' ');
     final lastWordLength = splitWords.last.length;
     return startingPoisition.dx + (text.length - lastWordLength);
@@ -33,6 +33,15 @@ final class SentenceEntity {
     final charactersUntilWord =
         splitWords.sublist(0, indexOfWordToNavigate).join(' ').length;
     return startingPoisition + Offset(charactersUntilWord.toDouble(), 0);
+  }
+
+  Offset endOfWordWithIndex(int index) {
+    final splitWords = text.split(' ');
+    double dx = startingPoisition.dx;
+    for (int i = 0; i <= index; i++) {
+      dx += splitWords[i].length;
+    }
+    return Offset(dx - 1, startingPoisition.dy);
   }
 
   int? indexOfWordInOffset({required double carretDxOffset}) {

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vim_game/carret_validator.dart';
 import 'package:vim_game/key_event.dart';
 import 'package:vim_game/providers/providers.dart';
+import 'package:vim_game/word_navigation.dart';
 
 mixin KeyboardEventListener<T extends ConsumerStatefulWidget>
     on ConsumerState<T> {
@@ -23,16 +24,9 @@ mixin KeyboardEventListener<T extends ConsumerStatefulWidget>
   }
 
   void _handleWordNavigationEvent(WordNavigationEvent event) {
-    (switch (event) {
-      AdvanceToEndOfNextWordEvent() => _goToEndOfNextWord(),
-      _ => () {}
-    });
-  }
-
-  void _goToEndOfNextWord() {
-    final sentence = ref.read(sentenceProvider);
-    final nextWordEndOffset = sentence.endOfWordOffset();
-    _moveCursor(nextWordEndOffset);
+    final handler = _buildNavigationHandler().setHandlerBasedOnEvent(event);
+    final offset = handler.newOffset();
+    _moveCursor(offset);
   }
 
   void onCursorEvent(CursorEvent event) {
@@ -46,5 +40,12 @@ mixin KeyboardEventListener<T extends ConsumerStatefulWidget>
 
   void _moveCursor(Offset offset) {
     ref.read(carretProvider.notifier).updateCarretPosition(offset);
+  }
+
+  WordNavigation _buildNavigationHandler() {
+    final carretOffset = ref.read(carretProvider);
+    final sentence = ref.read(sentenceProvider);
+    return WordNavigation(
+        carretOffset: carretOffset.offset, sentence: sentence);
   }
 }
