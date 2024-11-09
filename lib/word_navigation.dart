@@ -50,7 +50,12 @@ final class _NavigatingToEndOfNextWord extends WordNavigation {
     }
 
     final overlappingWordIndex = findOverlappingWordIndex();
-    return sentence.endOfWordWithIndex(overlappingWordIndex ?? 0);
+    print('Overlapping word index $overlappingWordIndex');
+    print('My current dx is> ${carretOffset.dx}');
+    final endOfWordOffset = sentence.findOffsetOfWordEnd(
+        wordIndex: overlappingWordIndex == null ? 0 : overlappingWordIndex + 1);
+
+    return Offset(endOfWordOffset.dx - 1, endOfWordOffset.dy);
   }
 }
 
@@ -96,8 +101,7 @@ final class _NavigatingToBeginningOfPreviousWord extends WordNavigation {
   Offset _findOffsetOfBeginningWordWithIndex(
     int indexOfWordToNavigate,
   ) =>
-      sentence.beginningOfWordOffset(
-          indexOfWordToNavigate: indexOfWordToNavigate);
+      sentence.findOffsetOfWordStart(wordIndex: indexOfWordToNavigate);
 
   void _setDxToBeginningOfLastWord(double carretDx) =>
       carretDx = sentence.beginningOfLastWordDx;

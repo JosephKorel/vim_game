@@ -1,5 +1,16 @@
 import 'package:flutter/material.dart';
 
+extension OffsetUtils on Offset {
+  bool isInRange(Offset beginning, Offset end) {
+    final dxIsInRange = dx >= beginning.dx && dx <= end.dx;
+    final dyIsInRange = dy >= beginning.dy && dy <= end.dy;
+    return dxIsInRange && dyIsInRange;
+  }
+
+  bool dxIsInRange(Offset beginning, Offset end) =>
+      dx >= beginning.dx && dx <= end.dx;
+}
+
 final class SentenceEntity {
   const SentenceEntity({
     required this.text,
@@ -9,7 +20,7 @@ final class SentenceEntity {
   static const _startingOffset = Offset(2.0, 2.0);
 
   const SentenceEntity.initialValue()
-      : text = 'Text',
+      : text = 'A cool text with more than one word',
         startingPoisition = _startingOffset;
 
   final String text;
@@ -21,6 +32,8 @@ final class SentenceEntity {
     return startingPoisition.dx + (text.length - lastWordLength);
   }
 
+  List<String> get _splitPattern => text.split(' ');
+
   bool wordsInThisLine(double carretDyOffset) =>
       startingPoisition.dy == carretDyOffset;
 
@@ -28,34 +41,31 @@ final class SentenceEntity {
     return startingPoisition + Offset(text.length - 1, 0);
   }
 
-  Offset beginningOfWordOffset({int indexOfWordToNavigate = 0}) {
-    final splitWords = text.split(' ');
+  Offset findOffsetOfWordStart({int wordIndex = 0}) {
     final charactersUntilWord =
-        splitWords.sublist(0, indexOfWordToNavigate).join(' ').length;
+        _splitPattern.sublist(0, wordIndex).join(' ').length;
     return startingPoisition + Offset(charactersUntilWord.toDouble(), 0);
   }
 
-  Offset endOfWordWithIndex(int index) {
-    final splitWords = text.split(' ');
-    double dx = startingPoisition.dx;
-    for (int i = 0; i <= index; i++) {
-      dx += splitWords[i].length;
-    }
-    return Offset(dx - 1, startingPoisition.dy);
+  Offset findOffsetOfWordEnd({int wordIndex = 0}) {
+    final distance = _splitPattern.sublist(0, wordIndex + 1).join(' ').length;
+    final dxDistance = startingPoisition.dx + distance;
+
+    return Offset(dxDistance, startingPoisition.dy);
   }
 
+  /// Find the index of the word that the carret is above
   int? indexOfWordInOffset({required double carretDxOffset}) {
-    final splitWords = text.split(' ');
-    int? indexOfWord;
-    int dx = startingPoisition.dx.toInt();
-    for (int i = 0; i < splitWords.length; i++) {
-      final word = splitWords[i];
-      dx += word.length;
-      if (carretDxOffset.toInt() <= dx) {
-        indexOfWord = i;
-        break;
+    for (int i = 0; i < _splitPattern.length; i++) {
+      final startOffset = findOffsetOfWordStart(wordIndex: i);
+      final endOffset = findOffsetOfWordEnd(wordIndex: i);
+      final dxIsInRange =
+          carretDxOffset >= startOffset.dx && carretDxOffset <= endOffset.dx;
+
+      if (dxIsInRange) {
+        return i;
       }
     }
-    return indexOfWord;
+    return null;
   }
 }
