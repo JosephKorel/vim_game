@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 extension OffsetUtils on Offset {
   bool isInRange(Offset beginning, Offset end) {
@@ -48,6 +49,10 @@ final class SentenceEntity {
   }
 
   Offset findOffsetOfWordEnd({int wordIndex = 0}) {
+    if (wordIndex == 0) {
+      return startingPoisition;
+    }
+
     final distance = _splitPattern.sublist(0, wordIndex + 1).join(' ').length;
     final dxDistance = startingPoisition.dx + distance;
 
@@ -55,12 +60,18 @@ final class SentenceEntity {
   }
 
   /// Find the index of the word that the carret is above
-  int? indexOfWordInOffset({required double carretDxOffset}) {
+  int? indexOfWordInOffset({required Offset carretOffset}) {
+    final dx = carretOffset.dx;
+    final dy = carretOffset.dy;
+
+    if (dy != startingPoisition.dy) {
+      return null;
+    }
+
     for (int i = 0; i < _splitPattern.length; i++) {
       final startOffset = findOffsetOfWordStart(wordIndex: i);
       final endOffset = findOffsetOfWordEnd(wordIndex: i);
-      final dxIsInRange =
-          carretDxOffset >= startOffset.dx && carretDxOffset <= endOffset.dx;
+      final dxIsInRange = dx >= startOffset.dx && dx <= endOffset.dx;
 
       if (dxIsInRange) {
         return i;

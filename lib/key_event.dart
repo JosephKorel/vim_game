@@ -75,3 +75,7 @@ final class AdvanceToEndOfNextWordEvent extends WordNavigationEvent {
 final class AdvanceToBeginningOfPreviousWordEvent extends WordNavigationEvent {
   const AdvanceToBeginningOfPreviousWordEvent();
 }
+
+final class AdvanceToBeginningOfNextWordEvent extends WordNavigationEvent {
+  const AdvanceToBeginningOfNextWordEvent();
+}

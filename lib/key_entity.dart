@@ -165,6 +165,18 @@ final class AdvanceToBeginningOfPreviousWordKey extends KeyEntity {
   }
 }
 
+final class AdvanceToBeginningOfNextWordKey extends KeyEntity {
+  const AdvanceToBeginningOfNextWordKey();
+
+  @override
+  LogicalKeyboardKey get _key => LogicalKeyboardKey.keyW;
+
+  @override
+  CursorEvent perform(KeyEntity? previousKey) {
+    return const AdvanceToBeginningOfNextWordEvent();
+  }
+}
+
 final List<KeyEntity> entityKeys = [
   NumberKey(),
   const LeftKey(),
@@ -174,5 +186,6 @@ final List<KeyEntity> entityKeys = [
   const EnterInsertAfterModeKey(),
   const EnterNormalModeKey(),
   const AdvanceToEndOfNextWordKey(),
+  const AdvanceToBeginningOfNextWordKey(),
   const AdvanceToBeginningOfPreviousWordKey(),
 ];

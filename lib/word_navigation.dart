@@ -11,10 +11,18 @@ base class WordNavigation {
   WordNavigation setHandlerBasedOnEvent(WordNavigationEvent event) =>
       switch (event) {
         AdvanceToEndOfNextWordEvent() => _NavigatingToEndOfNextWord(
-            carretOffset: carretOffset, sentence: sentence),
+            carretOffset: carretOffset,
+            sentence: sentence,
+          ),
+        AdvanceToBeginningOfNextWordEvent() => _NavigatingToBeginningOfNextWord(
+            carretOffset: carretOffset,
+            sentence: sentence,
+          ),
         AdvanceToBeginningOfPreviousWordEvent() =>
           _NavigatingToBeginningOfPreviousWord(
-              carretOffset: carretOffset, sentence: sentence),
+            carretOffset: carretOffset,
+            sentence: sentence,
+          ),
         _ => this,
       };
 
@@ -28,7 +36,7 @@ base class WordNavigation {
       carretOffset.dy > sentence.startingPoisition.dy;
 
   int? findOverlappingWordIndex() =>
-      sentence.indexOfWordInOffset(carretDxOffset: carretOffset.dx);
+      sentence.indexOfWordInOffset(carretOffset: carretOffset);
 
   final Offset carretOffset;
   final SentenceEntity sentence;
@@ -50,9 +58,48 @@ final class _NavigatingToEndOfNextWord extends WordNavigation {
     }
 
     final overlappingWordIndex = findOverlappingWordIndex();
-    print('Overlapping word index $overlappingWordIndex');
-    print('My current dx is> ${carretOffset.dx}');
-    final endOfWordOffset = sentence.findOffsetOfWordEnd(
+
+    if (overlappingWordIndex == null) {
+      final endOfWordOffset = sentence.findOffsetOfWordEnd(wordIndex: 0);
+
+      return endOfWordOffset;
+    }
+
+    final wordIndexToNavigate =
+        _carretIsAboveLastCharacter(overlappingWordIndex)
+            ? overlappingWordIndex + 1
+            : overlappingWordIndex;
+
+    final endOfWordOffset =
+        sentence.findOffsetOfWordEnd(wordIndex: wordIndexToNavigate);
+
+    return Offset(endOfWordOffset.dx - 1, endOfWordOffset.dy);
+  }
+
+  bool _carretIsAboveLastCharacter(int overlappingWordIndex) {
+    final lastCharacterOffset =
+        sentence.findOffsetOfWordEnd(wordIndex: overlappingWordIndex);
+    return carretOffset.dy == lastCharacterOffset.dy;
+  }
+}
+
+final class _NavigatingToBeginningOfNextWord extends WordNavigation {
+  const _NavigatingToBeginningOfNextWord({
+    required super.carretOffset,
+    required super.sentence,
+  });
+
+  @override
+  Offset newOffset() => _findOffset();
+
+  Offset _findOffset() {
+    final carretIsBelowAnySentence = super.carretIsBelowAnySentence;
+    if (carretIsBelowAnySentence) {
+      return carretOffset;
+    }
+
+    final overlappingWordIndex = findOverlappingWordIndex();
+    final endOfWordOffset = sentence.findOffsetOfWordStart(
         wordIndex: overlappingWordIndex == null ? 0 : overlappingWordIndex + 1);
 
     return Offset(endOfWordOffset.dx - 1, endOfWordOffset.dy);
