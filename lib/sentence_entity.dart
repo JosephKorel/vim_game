@@ -42,21 +42,22 @@ final class SentenceEntity {
     return startingPoisition + Offset(text.length - 1, 0);
   }
 
+  Offset get offsetOfLastWordStart =>
+      findOffsetOfWordStart(wordIndex: _splitPattern.length - 1);
+
   Offset findOffsetOfWordStart({int wordIndex = 0}) {
-    final charactersUntilWord =
-        _splitPattern.sublist(0, wordIndex).join(' ').length;
-    return startingPoisition + Offset(charactersUntilWord.toDouble(), 0);
+    final distance = _numberOfCharactersUntilWord(wordIndex);
+    final wordLength = _splitPattern[wordIndex].length;
+    print('The index is: $wordIndex');
+    print('The distance is: $distance');
+    final dx = startingPoisition.dx + (distance - wordLength);
+    return Offset(dx, startingPoisition.dy);
   }
 
   Offset findOffsetOfWordEnd({int wordIndex = 0}) {
-    if (wordIndex == 0) {
-      return startingPoisition;
-    }
-
-    final distance = _splitPattern.sublist(0, wordIndex + 1).join(' ').length;
-    final dxDistance = startingPoisition.dx + distance;
-
-    return Offset(dxDistance, startingPoisition.dy);
+    final distance = _numberOfCharactersUntilWord(wordIndex);
+    final dx = startingPoisition.dx + (distance - 1);
+    return Offset(dx, startingPoisition.dy);
   }
 
   /// Find the index of the word that the carret is above
@@ -79,4 +80,7 @@ final class SentenceEntity {
     }
     return null;
   }
+
+  int _numberOfCharactersUntilWord(int wordIndex) =>
+      _splitPattern.sublist(0, wordIndex + 1).join(' ').length;
 }

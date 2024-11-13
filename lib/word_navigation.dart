@@ -38,6 +38,18 @@ base class WordNavigation {
   int? findOverlappingWordIndex() =>
       sentence.indexOfWordInOffset(carretOffset: carretOffset);
 
+  bool carretIsAboveLastCharacter(int overlappingWordIndex) {
+    final lastCharacterOffset =
+        sentence.findOffsetOfWordEnd(wordIndex: overlappingWordIndex);
+    return carretOffset == lastCharacterOffset;
+  }
+
+  bool carretIsAboveFirstCharacter(int overlappingWordIndex) {
+    final firstCharacterOffset =
+        sentence.findOffsetOfWordStart(wordIndex: overlappingWordIndex);
+    return carretOffset == firstCharacterOffset;
+  }
+
   final Offset carretOffset;
   final SentenceEntity sentence;
 }
@@ -65,21 +77,14 @@ final class _NavigatingToEndOfNextWord extends WordNavigation {
       return endOfWordOffset;
     }
 
-    final wordIndexToNavigate =
-        _carretIsAboveLastCharacter(overlappingWordIndex)
-            ? overlappingWordIndex + 1
-            : overlappingWordIndex;
+    final wordIndexToNavigate = carretIsAboveLastCharacter(overlappingWordIndex)
+        ? overlappingWordIndex + 1
+        : overlappingWordIndex;
 
     final endOfWordOffset =
         sentence.findOffsetOfWordEnd(wordIndex: wordIndexToNavigate);
 
-    return Offset(endOfWordOffset.dx - 1, endOfWordOffset.dy);
-  }
-
-  bool _carretIsAboveLastCharacter(int overlappingWordIndex) {
-    final lastCharacterOffset =
-        sentence.findOffsetOfWordEnd(wordIndex: overlappingWordIndex);
-    return carretOffset.dy == lastCharacterOffset.dy;
+    return Offset(endOfWordOffset.dx, endOfWordOffset.dy);
   }
 }
 
@@ -99,10 +104,17 @@ final class _NavigatingToBeginningOfNextWord extends WordNavigation {
     }
 
     final overlappingWordIndex = findOverlappingWordIndex();
-    final endOfWordOffset = sentence.findOffsetOfWordStart(
-        wordIndex: overlappingWordIndex == null ? 0 : overlappingWordIndex + 1);
+    if (overlappingWordIndex == null) {
+      return sentence.offsetOfLastWordStart;
+    }
 
-    return Offset(endOfWordOffset.dx - 1, endOfWordOffset.dy);
+    final wordIndexToNavigate = carretIsAboveLastCharacter(overlappingWordIndex)
+        ? overlappingWordIndex + 1
+        : overlappingWordIndex;
+
+    final endOfWordOffset =
+        sentence.findOffsetOfWordStart(wordIndex: wordIndexToNavigate);
+    return Offset(endOfWordOffset.dx, endOfWordOffset.dy);
   }
 }
 
@@ -116,43 +128,24 @@ final class _NavigatingToBeginningOfPreviousWord extends WordNavigation {
   Offset newOffset() => _findOffset();
 
   Offset _findOffset() {
-    double dy = carretOffset.dy;
-    double dx = carretOffset.dx;
-
     final carretIsAboveAnySentence = super.carretIsAboveAnySentence;
-
     if (carretIsAboveAnySentence) {
-      return Offset(dx, dy);
+      return carretOffset;
     }
 
-    final carretIsBelowAnySentence = super.carretIsBelowAnySentence;
-    if (carretIsBelowAnySentence) {
-      _setDyToSentenceLineAndDxToBeginningOfLastWord(dy, dx);
-      return Offset(dx, dy);
+    final overlappingWordIndex = findOverlappingWordIndex();
+    if (overlappingWordIndex == null) {
+      return sentence.offsetOfLastWordStart;
     }
 
-    final overlappingIndex = findOverlappingWordIndex();
-    final wordOffset =
-        _findOffsetOfBeginningWordWithIndex(overlappingIndex ?? 0);
-    return wordOffset;
+    final wordIndexToNavigate =
+        carretIsAboveFirstCharacter(overlappingWordIndex)
+            ? overlappingWordIndex - 1
+            : overlappingWordIndex;
+
+    final wordStartOffset =
+        sentence.findOffsetOfWordStart(wordIndex: wordIndexToNavigate);
+
+    return wordStartOffset;
   }
-
-  void _setDyToSentenceLineAndDxToBeginningOfLastWord(
-    double carretDy,
-    double carretDx,
-  ) {
-    _setDyToBeInSentenceLine(carretDy, sentence.startingPoisition.dy);
-    _setDxToBeginningOfLastWord(carretDx);
-  }
-
-  Offset _findOffsetOfBeginningWordWithIndex(
-    int indexOfWordToNavigate,
-  ) =>
-      sentence.findOffsetOfWordStart(wordIndex: indexOfWordToNavigate);
-
-  void _setDxToBeginningOfLastWord(double carretDx) =>
-      carretDx = sentence.beginningOfLastWordDx;
-
-  void _setDyToBeInSentenceLine(double carretDy, double sentenceDy) =>
-      carretDy = sentenceDy;
 }
