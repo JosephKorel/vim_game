@@ -48,8 +48,6 @@ final class SentenceEntity {
   Offset findOffsetOfWordStart({int wordIndex = 0}) {
     final distance = _numberOfCharactersUntilWord(wordIndex);
     final wordLength = _splitPattern[wordIndex].length;
-    print('The index is: $wordIndex');
-    print('The distance is: $distance');
     final dx = startingPoisition.dx + (distance - wordLength);
     return Offset(dx, startingPoisition.dy);
   }

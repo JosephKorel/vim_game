@@ -105,12 +105,10 @@ final class _NavigatingToBeginningOfNextWord extends WordNavigation {
 
     final overlappingWordIndex = findOverlappingWordIndex();
     if (overlappingWordIndex == null) {
-      return sentence.offsetOfLastWordStart;
+      return sentence.startingPoisition;
     }
 
-    final wordIndexToNavigate = carretIsAboveLastCharacter(overlappingWordIndex)
-        ? overlappingWordIndex + 1
-        : overlappingWordIndex;
+    final wordIndexToNavigate = overlappingWordIndex + 1;
 
     final endOfWordOffset =
         sentence.findOffsetOfWordStart(wordIndex: wordIndexToNavigate);
