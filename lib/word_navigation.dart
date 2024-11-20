@@ -35,8 +35,10 @@ base class WordNavigation {
       !sentence.wordsInThisLine(carretOffset.dy) &&
       carretOffset.dy > sentence.startingPoisition.dy;
 
-  int? findOverlappingWordIndex() =>
-      sentence.indexOfWordInOffset(carretOffset: carretOffset);
+  int? findOverlappingWordIndex() => sentence.indexOfWordInOffset(
+        carretOffset: carretOffset,
+        goingLeft: this is _NavigatingToBeginningOfPreviousWord,
+      );
 
   bool carretIsAboveLastCharacter(int overlappingWordIndex) {
     final lastCharacterOffset =
@@ -84,7 +86,7 @@ final class _NavigatingToEndOfNextWord extends WordNavigation {
     final endOfWordOffset =
         sentence.findOffsetOfWordEnd(wordIndex: wordIndexToNavigate);
 
-    return Offset(endOfWordOffset.dx, endOfWordOffset.dy);
+    return endOfWordOffset;
   }
 }
 
@@ -112,7 +114,8 @@ final class _NavigatingToBeginningOfNextWord extends WordNavigation {
 
     final endOfWordOffset =
         sentence.findOffsetOfWordStart(wordIndex: wordIndexToNavigate);
-    return Offset(endOfWordOffset.dx, endOfWordOffset.dy);
+
+    return endOfWordOffset;
   }
 }
 

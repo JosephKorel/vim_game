@@ -59,9 +59,17 @@ final class SentenceEntity {
   }
 
   /// Find the index of the word that the carret is above
-  int? indexOfWordInOffset({required Offset carretOffset}) {
+  int? indexOfWordInOffset(
+      {required Offset carretOffset, required bool goingLeft}) {
     final dx = carretOffset.dx;
     final dy = carretOffset.dy;
+
+    if (_carretIsInEmptySpace(carretOffset)) {
+      return _findIndexWhenCarretIsInEmptySpace(
+        carretOffset: carretOffset,
+        goingLeft: goingLeft,
+      );
+    }
 
     if (dy != startingPoisition.dy) {
       return null;
@@ -81,4 +89,67 @@ final class SentenceEntity {
 
   int _numberOfCharactersUntilWord(int wordIndex) =>
       _splitPattern.sublist(0, wordIndex + 1).join(' ').length;
+
+  bool _carretIsInEmptySpace(Offset carretOffset) {
+    if (startingPoisition.dx >= carretOffset.dx) {
+      return false;
+    }
+
+    final dx = carretOffset.dx - startingPoisition.dx;
+    final character = text[dx.toInt()];
+    return character == ' ';
+  }
+
+  int _findIndexWhenCarretIsInEmptySpace({
+    required Offset carretOffset,
+    required bool goingLeft,
+  }) {
+    final adjacentIndexes = _findAdjacentWordIndexes(carretOffset.dx);
+    return goingLeft ? adjacentIndexes.$1 : adjacentIndexes.$2;
+  }
+
+  (int leftWordIndex, int rightWordIndex) _findAdjacentWordIndexes(
+      double carretDxOffset) {
+    final startIndex = (carretDxOffset - startingPoisition.dx).toInt();
+    var foundLeftWord = false;
+    var foundRightWord = false;
+    var leftWord = '';
+    var rightWord = '';
+    var indexToLeft = startIndex - 1;
+    var indexToRight = startIndex + 1;
+
+    while (!foundLeftWord) {
+      final character = _getCharacterOrEmptySpace(indexToLeft);
+      if (character == ' ') {
+        foundLeftWord = true;
+        break;
+      }
+      leftWord = character + leftWord;
+      indexToLeft--;
+    }
+
+    while (!foundRightWord) {
+      final character = _getCharacterOrEmptySpace(indexToRight);
+      if (character == ' ') {
+        foundRightWord = true;
+        break;
+      }
+
+      rightWord = rightWord + character;
+      indexToRight++;
+    }
+
+    final leftWordIndex = _splitPattern.indexOf(leftWord.trim());
+    final rightWordIndex = _splitPattern.indexOf(rightWord.trim());
+
+    return (leftWordIndex, rightWordIndex);
+  }
+
+  String _getCharacterOrEmptySpace(int iteratingIndex) {
+    if (iteratingIndex < 0 || iteratingIndex > text.length) {
+      return ' ';
+    }
+
+    return text[iteratingIndex];
+  }
 }
