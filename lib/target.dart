@@ -2,30 +2,30 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-final class GameTarget {
-  const GameTarget({
+final class XTarget {
+  const XTarget({
     required this.offset,
   });
 
-  factory GameTarget.startingValue() => const GameTarget(offset: Offset(1, 1));
+  factory XTarget.startingValue() => const XTarget(offset: Offset(1, 1));
 
-  factory GameTarget.randomizeY(
+  factory XTarget.randomizeY(
     double currentTargetX, {
     required int minValue,
     required int maxValue,
   }) {
-    return GameTarget(
+    return XTarget(
       offset: Offset(
           currentTargetX, (Random().nextInt(maxValue) + minValue).toDouble()),
     );
   }
 
-  factory GameTarget.randomizeX(
+  factory XTarget.randomizeX(
     double currentTargetY, {
     required int minValue,
     required int maxValue,
   }) {
-    return GameTarget(
+    return XTarget(
       offset: Offset(
         (Random().nextInt(maxValue) + minValue).toDouble(),
         currentTargetY,
@@ -33,11 +33,11 @@ final class GameTarget {
     );
   }
 
-  factory GameTarget.randomize({
+  factory XTarget.randomize({
     required int minValue,
     required int maxValue,
   }) {
-    return GameTarget(
+    return XTarget(
       offset: Offset(
         (Random().nextInt(maxValue) + minValue).toDouble(),
         (Random().nextInt(maxValue) + minValue).toDouble(),

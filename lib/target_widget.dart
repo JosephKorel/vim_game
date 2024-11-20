@@ -1,57 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vim_game/providers/providers.dart';
-import 'package:vim_game/target.dart';
 import 'package:vim_game/theme/utils.dart';
 
-class Target extends ConsumerStatefulWidget {
-  const Target({super.key, required this.squareSize, required this.gridSize});
+class XTargetWidget extends ConsumerWidget {
+  const XTargetWidget({
+    super.key,
+    required this.squareSize,
+    required this.gridSize,
+  });
 
   final Size squareSize;
   final Size gridSize;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _TargetState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final target = ref.watch(targetProvider);
 
-class _TargetState extends ConsumerState<Target> {
-  GameTarget _target = GameTarget.startingValue();
-
-  bool _carretOffsetMatchesTarget(Offset carretOffset) =>
-      carretOffset == _target.offset;
-
-  void _updateTargetPosition() {
-    setState(() {
-      _target =
-          GameTarget.randomizeY(_target.offset.dx, minValue: 1, maxValue: 10);
-    });
-  }
-
-  void _onCursorPositionChange(Offset carretOffset) {
-    if (_carretOffsetMatchesTarget(carretOffset)) {
-      _setScore();
-      _updateTargetPosition();
-    }
-  }
-
-  void _setScore() {
-    ref.read(scoreProvider.notifier).incrementScore();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    ref.listen(carretProvider, (previous, next) {
-      _onCursorPositionChange(next.offset);
-    });
-
-    final left = _target.offset.dx * widget.squareSize.width;
-    final top = _target.offset.dy * widget.squareSize.height;
+    final left = target.offset.dx * squareSize.width;
+    final top = target.offset.dy * squareSize.height;
 
     return Positioned(
       left: left,
       top: top,
       child: SizedBox.fromSize(
-        size: widget.squareSize,
+        size: squareSize,
         child: Center(
           child: Text(
             'X',

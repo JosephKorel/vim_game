@@ -36,6 +36,36 @@ final carretProvider =
 );
 
 typedef _$Carret = AutoDisposeNotifier<CarretPosition>;
+String _$targetHash() => r'a469e69be22ed959982daaacd2f6b138e8c70ca2';
+
+/// See also [Target].
+@ProviderFor(Target)
+final targetProvider = AutoDisposeNotifierProvider<Target, XTarget>.internal(
+  Target.new,
+  name: r'targetProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$targetHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$Target = AutoDisposeNotifier<XTarget>;
+String _$currentObjectiveHash() => r'b8dd260017d03ae628b842535c66e5c69a75de2d';
+
+/// See also [CurrentObjective].
+@ProviderFor(CurrentObjective)
+final currentObjectiveProvider =
+    AutoDisposeNotifierProvider<CurrentObjective, ObjectiveType>.internal(
+  CurrentObjective.new,
+  name: r'currentObjectiveProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$currentObjectiveHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$CurrentObjective = AutoDisposeNotifier<ObjectiveType>;
 String _$themeHash() => r'69e4c75d5051bd37071d58352bb78f322f5ca808';
 
 /// See also [Theme].

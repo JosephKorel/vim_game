@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vim_game/carret_position.dart';
 import 'package:vim_game/mode.dart';
+import 'package:vim_game/score.dart';
 import 'package:vim_game/sentence_entity.dart';
+import 'package:vim_game/target.dart';
 
 part 'providers.g.dart';
 
@@ -27,6 +29,30 @@ class Carret extends _$Carret {
 
   void updateCarretPosition(Offset offset) {
     state = state.moveTo(offset);
+  }
+}
+
+@riverpod
+class Target extends _$Target {
+  @override
+  XTarget build() {
+    return XTarget.startingValue();
+  }
+
+  void randomizeTargetY() {
+    state = XTarget.randomizeY(state.offset.dx, minValue: 1, maxValue: 10);
+  }
+
+  void randomizeTargetX() {
+    state = XTarget.randomizeX(state.offset.dy, minValue: 1, maxValue: 5);
+  }
+}
+
+@riverpod
+class CurrentObjective extends _$CurrentObjective {
+  @override
+  ObjectiveType build() {
+    return ObjectiveType.hitX;
   }
 }
 

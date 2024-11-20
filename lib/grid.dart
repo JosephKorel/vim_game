@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vim_game/app_bar_bottom.dart';
 import 'package:vim_game/carret.dart';
 import 'package:vim_game/color_select.dart';
 import 'package:vim_game/keyboard_listener.dart';
@@ -7,6 +8,7 @@ import 'package:vim_game/line_counter.dart';
 import 'package:vim_game/pressed_keys.dart';
 import 'package:vim_game/providers/providers.dart';
 import 'package:vim_game/sentence_widget.dart';
+import 'package:vim_game/target_widget.dart';
 import 'package:vim_game/theme/utils.dart';
 import 'package:vim_game/theme_switch.dart';
 import 'package:vim_game/vim_mode_widget.dart';
@@ -29,6 +31,7 @@ class EditorGrid extends StatelessWidget {
             width: 16,
           ),
         ],
+        bottom: const ScoreAndInstructions(),
         titleTextStyle: context.titleLarge.copyWith(
           fontWeight: FontWeight.w600,
           decoration: TextDecoration.underline,
@@ -78,13 +81,13 @@ class EditorGrid extends StatelessWidget {
                                   squareSize: squareSize,
                                 ),
                                 GridOverlay(squareSize: squareWidth),
-                                // Target(
-                                //   squareSize: squareSize,
-                                //   gridSize: Size(
-                                //     constraints.maxWidth,
-                                //     constraints.maxHeight,
-                                //   ),
-                                // ),
+                                XTargetWidget(
+                                  squareSize: squareSize,
+                                  gridSize: Size(
+                                    constraints.maxWidth,
+                                    constraints.maxHeight,
+                                  ),
+                                ),
                                 SentenceWidget(squareSize: squareSize),
                               ],
                             ),

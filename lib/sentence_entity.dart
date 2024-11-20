@@ -35,6 +35,16 @@ final class SentenceEntity {
 
   List<String> get _splitPattern => text.split(' ');
 
+  List<Offset> wordRangeOffset(int wordIndex) {
+    final startOffset = findOffsetOfWordStart(wordIndex: wordIndex);
+    final endOffset = findOffsetOfWordEnd(wordIndex: wordIndex);
+    final List<Offset> offsetList = [];
+    for (int i = startOffset.dx.toInt(); i < endOffset.dx; i++) {
+      offsetList.add(Offset(i.toDouble(), startOffset.dy));
+    }
+    return offsetList;
+  }
+
   bool wordsInThisLine(double carretDyOffset) =>
       startingPoisition.dy == carretDyOffset;
 
