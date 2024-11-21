@@ -51,8 +51,8 @@ class Target extends _$Target {
 @riverpod
 class CurrentObjective extends _$CurrentObjective {
   @override
-  ObjectiveType build() {
-    return ObjectiveType.hitX;
+  GameStage build() {
+    return GameStage.hitX;
   }
 }
 

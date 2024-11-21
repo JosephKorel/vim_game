@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vim_game/sentence_objective.dart';
 
-enum ObjectiveType {
+/// Phases of the game
+enum GameStage {
   hitX,
   hitWord,
 }
@@ -10,14 +11,12 @@ interface class Objective {
   bool didHitObjective() => false;
 }
 
-base class GameObjective {
-  GameObjective({required this.carretPosition, required this.objective});
+class GameObjective {
+  GameObjective({required this.objective});
 
   Objective objective;
-  Offset carretPosition;
 
-  void onCarretPositionChange(Offset carretPosition, Objective objective) {
-    this.carretPosition = carretPosition;
+  void onCarretPositionChange(Objective objective) {
     this.objective = objective;
   }
 }

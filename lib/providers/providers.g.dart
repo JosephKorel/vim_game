@@ -55,7 +55,7 @@ String _$currentObjectiveHash() => r'b8dd260017d03ae628b842535c66e5c69a75de2d';
 /// See also [CurrentObjective].
 @ProviderFor(CurrentObjective)
 final currentObjectiveProvider =
-    AutoDisposeNotifierProvider<CurrentObjective, ObjectiveType>.internal(
+    AutoDisposeNotifierProvider<CurrentObjective, GameStage>.internal(
   CurrentObjective.new,
   name: r'currentObjectiveProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -65,7 +65,7 @@ final currentObjectiveProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$CurrentObjective = AutoDisposeNotifier<ObjectiveType>;
+typedef _$CurrentObjective = AutoDisposeNotifier<GameStage>;
 String _$themeHash() => r'69e4c75d5051bd37071d58352bb78f322f5ca808';
 
 /// See also [Theme].
