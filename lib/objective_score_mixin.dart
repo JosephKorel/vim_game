@@ -28,7 +28,6 @@ mixin ObjectiveScoreProvider<T extends ConsumerStatefulWidget>
       _updateObjective();
     }
   }
-
   void initializeGameObjective() {
     final objective = HitXObjective(
         targetPosition: targetPosition, carretPosition: carretPosition);

@@ -30,11 +30,29 @@ class _ScoreAndInstructionsState extends ConsumerState<ScoreAndInstructions>
     return const Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _Instructions(),
+          _Separator(),
           _Score(),
         ],
+      ),
+    );
+  }
+}
+
+class _Separator extends StatelessWidget {
+  const _Separator();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Text(
+        '|',
+        style: context.titleMedium.copyWith(
+          color: context.onSurface.withOpacity(0.4),
+        ),
       ),
     );
   }
@@ -47,30 +65,22 @@ class _Instructions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        // Text(
+        //   'Goal:',
+        //   style: context.bodyMedium.copyWith(
+        //     fontWeight: FontWeight.w600,
+        //     color: context.primary,
+        //   ),
+        // ),
+        // const SizedBox(
+        //   width: 8,
+        // ),
         Text(
-          'Goal:',
-          style: context.bodyMedium.copyWith(
+          'Go to the X',
+          style: context.bodyLarge.copyWith(
             fontWeight: FontWeight.w600,
+            fontStyle: FontStyle.italic,
             color: context.primary,
-          ),
-        ),
-        const SizedBox(
-          width: 8,
-        ),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: context.primary,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
-              'Go to the X',
-              style: context.bodyMedium.copyWith(
-                fontWeight: FontWeight.w600,
-                fontStyle: FontStyle.italic,
-                color: context.onPrimary,
-              ),
-            ),
           ),
         ),
       ],
@@ -93,6 +103,14 @@ class _Score extends ConsumerWidget {
             color: context.primary,
           ),
         ),
+        //Text(
+        //  '$scoreCount',
+        //  style: context.bodyMedium.copyWith(
+        //    fontWeight: FontWeight.w600,
+        //    color: context.onPrimary,
+        //  ),
+        //),
+
         DecoratedBox(
           decoration: BoxDecoration(
             color: context.primary,
