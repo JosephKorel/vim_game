@@ -65,16 +65,6 @@ class _Instructions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // Text(
-        //   'Goal:',
-        //   style: context.bodyMedium.copyWith(
-        //     fontWeight: FontWeight.w600,
-        //     color: context.primary,
-        //   ),
-        // ),
-        // const SizedBox(
-        //   width: 8,
-        // ),
         Text(
           'Go to the X',
           style: context.bodyLarge.copyWith(
@@ -103,14 +93,6 @@ class _Score extends ConsumerWidget {
             color: context.primary,
           ),
         ),
-        //Text(
-        //  '$scoreCount',
-        //  style: context.bodyMedium.copyWith(
-        //    fontWeight: FontWeight.w600,
-        //    color: context.onPrimary,
-        //  ),
-        //),
-
         DecoratedBox(
           decoration: BoxDecoration(
             color: context.primary,
